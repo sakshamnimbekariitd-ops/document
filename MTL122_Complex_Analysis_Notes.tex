@@ -1,0 +1,2887 @@
+\documentclass[11pt,openany]{report}
+
+% ------------------------------------------------------------------
+%  MTL122 -- COMPLEX ANALYSIS : Comprehensive Course Notes
+% ------------------------------------------------------------------
+
+\usepackage[a4paper,margin=1in,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,decorations.pathmorphing}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{needspace}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=accentblue,
+  citecolor=accentblue,
+  urlcolor=accentblue,
+  bookmarksnumbered=true,
+  pdftitle={MTL122 Complex Analysis -- Comprehensive Notes},
+  pdfauthor={Course Notes}
+}
+
+% ---------- Colours ----------
+\definecolor{accentblue}{HTML}{1F5FA8}
+\definecolor{accentblue2}{HTML}{2E74B5}
+\definecolor{defncol}{HTML}{0B6E4F}
+\definecolor{defnbg}{HTML}{EAF6F0}
+\definecolor{thmcol}{HTML}{1F5FA8}
+\definecolor{thmbg}{HTML}{EAF1FB}
+\definecolor{lemcol}{HTML}{6A4C93}
+\definecolor{lembg}{HTML}{F2EEF8}
+\definecolor{corcol}{HTML}{9C4A1A}
+\definecolor{corbg}{HTML}{FBEFE7}
+\definecolor{excol}{HTML}{B00020}
+\definecolor{exbg}{HTML}{FDECEF}
+\definecolor{remcol}{HTML}{4A4A4A}
+\definecolor{rembg}{HTML}{F3F3F3}
+\definecolor{keycol}{HTML}{144E7A}
+\definecolor{keybg}{HTML}{FFF6E0}
+
+% ---------- Math shortcuts ----------
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Arg}{\operatorname{Arg}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newcommand{\pd}[2]{\dfrac{\partial #1}{\partial #2}}
+\newcommand{\To}{\longrightarrow}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\limsupn}{\varlimsup_{n\to\infty}}
+\newcommand{\Hol}{\mathcal{H}}
+\DeclareMathOperator{\dist}{d}
+
+% ---------- Theorem environments via tcolorbox ----------
+\tcbuselibrary{theorems,skins,breakable}
+
+\newtcbtheorem[number within=chapter]{definition}{Definition}{%
+  enhanced,breakable,colback=defnbg,colframe=defncol,fonttitle=\bfseries,
+  coltitle=white,attach boxed title to top left={xshift=6pt,yshift=-9pt},
+  boxed title style={colback=defncol,rounded corners},
+  left=3pt,right=3pt,top=8pt,bottom=6pt,arc=2pt,boxrule=0.7pt,
+  before skip=10pt,after skip=10pt}{def}
+
+\newtcbtheorem[number within=chapter]{theorem}{Theorem}{%
+  enhanced,breakable,colback=thmbg,colframe=thmcol,fonttitle=\bfseries,
+  coltitle=white,attach boxed title to top left={xshift=6pt,yshift=-9pt},
+  boxed title style={colback=thmcol,rounded corners},
+  left=3pt,right=3pt,top=8pt,bottom=6pt,arc=2pt,boxrule=0.7pt,
+  before skip=10pt,after skip=10pt}{thm}
+
+\newtcbtheorem[number within=chapter]{lemma}{Lemma}{%
+  enhanced,breakable,colback=lembg,colframe=lemcol,fonttitle=\bfseries,
+  coltitle=white,attach boxed title to top left={xshift=6pt,yshift=-9pt},
+  boxed title style={colback=lemcol,rounded corners},
+  left=3pt,right=3pt,top=8pt,bottom=6pt,arc=2pt,boxrule=0.7pt,
+  before skip=10pt,after skip=10pt}{lem}
+
+\newtcbtheorem[number within=chapter]{corollary}{Corollary}{%
+  enhanced,breakable,colback=corbg,colframe=corcol,fonttitle=\bfseries,
+  coltitle=white,attach boxed title to top left={xshift=6pt,yshift=-9pt},
+  boxed title style={colback=corcol,rounded corners},
+  left=3pt,right=3pt,top=8pt,bottom=6pt,arc=2pt,boxrule=0.7pt,
+  before skip=10pt,after skip=10pt}{cor}
+
+\newtcbtheorem[number within=chapter]{propos}{Proposition}{%
+  enhanced,breakable,colback=thmbg,colframe=accentblue2,fonttitle=\bfseries,
+  coltitle=white,attach boxed title to top left={xshift=6pt,yshift=-9pt},
+  boxed title style={colback=accentblue2,rounded corners},
+  left=3pt,right=3pt,top=8pt,bottom=6pt,arc=2pt,boxrule=0.7pt,
+  before skip=10pt,after skip=10pt}{prop}
+
+% Highlighted EXAMPLE box (user specifically wants examples highlighted)
+\newtcbtheorem[number within=chapter]{example}{Example}{%
+  enhanced,breakable,colback=exbg,colframe=excol,fonttitle=\bfseries,
+  coltitle=white,attach boxed title to top left={xshift=6pt,yshift=-9pt},
+  boxed title style={colback=excol,rounded corners},
+  left=3pt,right=3pt,top=8pt,bottom=6pt,arc=2pt,boxrule=1pt,
+  before skip=10pt,after skip=10pt,
+  overlay unbroken and first={\draw[excol,line width=3pt]
+  ([xshift=1.5pt]frame.south west)--([xshift=1.5pt]frame.north west);}}{ex}
+
+% Remark box (plain, subtle)
+\newtcolorbox{remark}[1][]{%
+  enhanced,breakable,colback=rembg,colframe=remcol!55,
+  fonttitle=\bfseries,coltitle=remcol,title={Remark},#1,
+  left=4pt,right=4pt,top=4pt,bottom=4pt,arc=1pt,boxrule=0.4pt,
+  before skip=8pt,after skip=8pt}
+
+\newtcolorbox{remarks}[1][]{%
+  enhanced,breakable,colback=rembg,colframe=remcol!55,
+  fonttitle=\bfseries,coltitle=remcol,title={Remarks},#1,
+  left=4pt,right=4pt,top=4pt,bottom=4pt,arc=1pt,boxrule=0.4pt,
+  before skip=8pt,after skip=8pt}
+
+% Key-formula highlight box
+\newtcolorbox{keybox}[1][]{%
+  enhanced,colback=keybg,colframe=keycol,boxrule=0.8pt,arc=2pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  before skip=8pt,after skip=8pt,#1}
+
+% "Warning / Caution" note used a lot by the prof ("(2) NOT true in R")
+\newtcolorbox{caution}[1][]{%
+  enhanced,breakable,colback=corbg,colframe=corcol,boxrule=0.6pt,arc=1pt,
+  left=6pt,right=6pt,top=4pt,bottom=4pt,
+  fonttitle=\bfseries,coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-8pt},
+  boxed title style={colback=corcol},title={\small !\ Caution},
+  before skip=8pt,after skip=8pt,#1}
+
+% ---------- Proof tweak ----------
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+% ---------- Section styling ----------
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{accentblue}}
+  {\filright\Large\color{accentblue!70}\MakeUppercase{Chapter \thechapter}}
+  {8pt}{\huge\raggedright}
+\titlespacing*{\chapter}{0pt}{10pt}{18pt}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{accentblue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{accentblue2}}{\thesubsection}{0.6em}{}
+
+% ---------- Headers ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\itshape MTL122 --- Complex Analysis}
+\fancyhead[R]{\small\itshape\leftmark}
+\fancyfoot[C]{\thepage}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+\begin{document}
+
+% ================= TITLE PAGE =================
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\color{accentblue}\rule{\textwidth}{2pt}}\\[10pt]
+{\Huge\bfseries\color{accentblue} MTL122\\[6pt] Complex Analysis}\\[10pt]
+{\Large Comprehensive Course Notes}\\[6pt]
+{\color{accentblue}\rule{\textwidth}{2pt}}\\[26pt]
+{\large A complete, exam-ready treatment following the lecture course:\\[4pt]
+from the field $\C$ and the topology of the plane, through the\\
+Cauchy--Riemann equations, power series and the elementary functions,\\
+Cauchy's theorem and integral formula, the great structural theorems\\
+(Liouville, the Fundamental Theorem of Algebra, the Identity, Maximum-Modulus\\
+and Open-Mapping theorems), up to isolated singularities, Laurent series\\
+and the residue.}\\[36pt]
+
+\begin{tcolorbox}[enhanced,width=0.85\textwidth,colback=keybg,colframe=keycol,
+  arc=3pt,boxrule=1pt,halign=center]
+{\large\bfseries How to use these notes}\\[4pt]
+\small Every definition, theorem, lemma, corollary and proof from the course is
+included, in the same order and the same notation used in lectures. Worked
+\textbf{examples are boxed in red} so they stand out for revision; key formulas
+are boxed in \colorbox{keybg}{amber}. Points marked \textbf{``NOT true in $\R$''}
+flag exactly where complex analysis parts ways with real analysis --- a
+favourite source of exam questions.
+\end{tcolorbox}
+
+\vfill
+{\large\itshape Prepared for end-semester preparation}\\[4pt]
+{\color{accentblue}\rule{0.5\textwidth}{1pt}}
+\end{titlepage}
+
+% ================= CONTENTS =================
+\tableofcontents
+\thispagestyle{empty}
+\clearpage
+
+% CHAPTERS APPENDED BELOW
+
+
+% ============================================================
+\chapter{The Complex Numbers and the Field \texorpdfstring{$\C$}{C}}
+% ============================================================
+
+\section{The set \texorpdfstring{$\C$}{C} and its identification with \texorpdfstring{$\R^2$}{R2}}
+
+We begin with the definition of the complex numbers.
+\[
+  \C = \set{\, a+ib \;:\; a,b\in\R,\ \ i^2=-1 \,}.
+\]
+The crucial point is that this set is naturally identified with the plane $\R^2$:
+\[
+  \R^2 = \set{\,(a,b) \;:\; a,b\in\R\,}, \qquad a+ib \;\longleftrightarrow\; (a,b).
+\]
+On $\R^2$ we already have componentwise \emph{addition}. Complex multiplication is
+the extra structure that turns the plane into a field. Written out on ordered pairs:
+\[
+  (a_1,b_1)+(a_2,b_2) = (a_1+a_2,\; b_1+b_2),
+\]
+\[
+  (a_1,b_1)\cdot(a_2,b_2) = (a_1a_2-b_1b_2,\; a_1b_2+a_2b_1).
+\]
+(The multiplication rule is exactly what one obtains by expanding $(a_1+ib_1)(a_2+ib_2)$ and using $i^2=-1$.)
+
+\subsection{The real line sits inside the plane}
+
+There is an embedding $\R\hookrightarrow \R^2$ given by
+\[
+  a \;\longmapsto\; (a,0).
+\]
+Under this identification the real number $1$ becomes $(1,0)$, which is the multiplicative
+identity, and the arithmetic of the reals is respected. Note the two computations that
+pin down the role of the second coordinate:
+\[
+  (0,1)\cdot(1,0) = (0,1), \qquad (0,1)\cdot(0,1) = (-1,0).
+\]
+The second says $i^2=-1$: the element $i=(0,1)$ squares to $-1=(-1,0)$.
+
+\section{Multiplication as a geometric operation}
+
+\subsection{Multiplication by a real number}
+
+For $r\in\R$,
+\[
+  r\,(a,b) = (ra,\,rb).
+\]
+Suppose first $r>0$. Then multiplication by $r$ is a \emph{scaling} (a dilation) of the
+plane by the factor $r$; the vector $(a,b)$ is stretched along its own direction to
+$(ra,rb)$, and one may break this single multiplication into two successive
+multiplications of equal size $\sqrt r$.
+
+\begin{caution}
+\textbf{What about $r<0$?} Take $r=-1$. Then $-1\cdot(a,b) = (-a,-b)$, which is not a
+mere stretch: geometrically it is a \emph{rotation by $180^\circ$}. Thus scaling by a
+negative real already forces us to think of multiplication as combining a stretch with a
+rotation.
+\end{caution}
+
+\subsection{Multiplication by \texorpdfstring{$i$}{i} is rotation by \texorpdfstring{$90^\circ$}{90 degrees}}
+
+Consider the effect of $i=(0,1)$ on the basis vector $1=(1,0)$:
+\[
+  1=(1,0) \;\xrightarrow{\ \times\, 90^\circ\ }\; (0,1) = i.
+\]
+More generally, from the multiplication rule,
+\[
+  i\,(a,b) = (-b,\,a),
+\]
+which is precisely the anticlockwise rotation of the vector $(a,b)$ by $90^\circ$.
+\emph{Multiplication by $i$ is a rotation by $90^\circ$.} Iterating, $1\to i\to -1\to -i\to 1$
+walks around the four quarter-turns of the plane.
+
+Combining a real scaling with a rotation, for $r\in\R$ we also record
+\[
+  i\,r\,(a,b) = (-rb,\, ra).
+\]
+Finally, a general complex number $p+iq$ acts on $(a,b)$ by
+\[
+  (p+iq)(a,b) = p(a,b) + iq(a,b) = (pa,pb)+(-qb,qa) = (pa-qb,\; pb+qa),
+\]
+which is exactly the product rule again, and matches the familiar expansion
+\[
+  (a+ib)(c+id) = (ac-bd) + i(ad+bc).
+\]
+
+\section{\texorpdfstring{$\C$}{C} is a field}
+
+\begin{keybox}
+\centering
+$(\C,+,\cdot)$ is a \textbf{field}.
+\end{keybox}
+
+Addition and multiplication are commutative, associative and distributive; $(0,0)$ is the
+additive identity, $(1,0)$ the multiplicative identity, and every nonzero $a+ib$ has the
+inverse
+\[
+  (a+ib)^{-1} = \frac{a-ib}{a^2+b^2}.
+\]
+
+\section{Matrix representation of complex numbers}
+
+Complex multiplication can be encoded by real $2\times2$ matrices. Fix $a+ib$ and consider
+the map ``multiply by $(a,b)$'':
+\[
+  (c,d) \;\xmapsto{\ (a,b)\ \cdot\ }\; (ac-bd,\; ad+bc).
+\]
+As a linear map $\R^2\to\R^2$ acting on the column $\binom{c}{d}$,
+\[
+  \begin{pmatrix} c \\ d\end{pmatrix}
+  \;\longmapsto\;
+  \begin{pmatrix} ac-bd \\ ad+bc \end{pmatrix}
+  =
+  \begin{pmatrix} a & -b \\ b & a \end{pmatrix}
+  \begin{pmatrix} c \\ d\end{pmatrix}.
+\]
+This gives the identification
+\[
+  a+ib \;=\; (a,b) \;\longleftrightarrow\; \begin{pmatrix} a & -b \\ b & a \end{pmatrix}.
+\]
+One checks directly that matrix multiplication reproduces complex multiplication:
+\[
+  \begin{pmatrix} a & -b \\ b & a \end{pmatrix}
+  \begin{pmatrix} c & -d \\ d & c \end{pmatrix}
+  =
+  \begin{pmatrix} ac-bd & -(ad+bc) \\ ad+bc & ac-bd \end{pmatrix},
+\]
+which is the matrix of $(a,b)\cdot(c,d)=(ac-bd,\,ad+bc)$. Hence
+\[
+  \C \;\longleftrightarrow\;
+  \set{ \begin{pmatrix} a & -b \\ b & a \end{pmatrix} \;:\; a,b\in\R }.
+\]
+
+\section{Polar representation}
+
+A complex number corresponds to a vector in $\R^2$, and a vector is described by a
+\emph{direction} and a \emph{modulus}. Given $a+ib$, write $r=\sqrt{a^2+b^2}$ for its
+length and seek an angle $\theta$ with
+\[
+  a = r\cos\theta, \qquad b = r\sin\theta.
+\]
+Then
+\[
+  a+ib = r\cos\theta + i\,r\sin\theta = r(\cos\theta+i\sin\theta) = r\,e^{i\theta},
+\]
+the \textbf{polar representation}, where
+\[
+  r = \sqrt{a^2+b^2}, \qquad \tan\theta = \frac{b}{a}, \qquad r^2 = a^2+b^2.
+\]
+
+\begin{definition}{Principal argument}{prinarg}
+We ask for a value $\theta\in(-\pi,\pi]$ satisfying the above. Such a value of $\theta$ is
+called the \textbf{principal argument} of $a+ib$.
+\end{definition}
+
+\begin{remark}
+The choice of $\theta$ is \emph{not} unique: $\theta$ and $\theta+2\pi n$ ($n\in\Z$) give
+the same point. Fixing $\theta\in(-\pi,\pi]$ removes the ambiguity and defines the
+principal argument.
+\end{remark}
+
+\subsection{Multiplication in polar form}
+
+Polar form makes multiplication transparent. If
+\[
+  a+ib = r_1 e^{i\theta_1}, \qquad c+id = r_2 e^{i\theta_2},
+\]
+then
+\[
+  (a+ib)(c+id) = r_1 r_2\, e^{\,i(\theta_1+\theta_2)} \pmod{2\pi}.
+\]
+\emph{Moduli multiply and arguments add} (modulo $2\pi$). This is the analytic form of the
+``stretch-and-rotate'' picture: the factor $r_2$ scales, and the angle $\theta_2$ rotates.
+
+\section{Modulus and conjugate}
+
+The number $r$ is called the \textbf{modulus} of the complex number $z=a+ib$, written
+$\abs{z}=r$. The \textbf{conjugate} of $z=a+ib$ is
+\[
+  \bar z = a-ib.
+\]
+The fundamental relations are
+\[
+  r^2 = z\,\bar z, \qquad \text{i.e.}\qquad \abs{z}^2 = z\,\bar z .
+\]
+Indeed $z\bar z=(a+ib)(a-ib)=a^2+b^2$.
+
+
+% ============================================================
+\chapter{The Extended Complex Plane and Stereographic Projection}
+% ============================================================
+
+\section{Complex numbers as points on a sphere}
+
+We wish to set up a correspondence
+\[
+  \text{complex numbers} \;\longleftrightarrow\; \text{points on a sphere}.
+\]
+Take the sphere (the \textbf{Riemann sphere})
+\[
+  S = \set{ (u,v,w) \;:\; u^2+v^2+\Big(w-\tfrac12\Big)^2 = \tfrac14 },
+\]
+which sits on the $xy$-plane, has its south pole at the origin $(0,0,0)$ and its north
+pole at $(0,0,1)$.
+
+\subsection{The projection}
+
+Take a point $(u,v,w)$ on $S$. Draw the line joining the north pole $(0,0,1)$ and the
+point $(u,v,w)$. Suppose it cuts the $xy$-plane at the point $(x,y,0)$. Then we
+\textbf{identify} the sphere point $(u,v,w)$ with the complex number $x+iy$.
+
+The three points $(0,0,1)$, $(u,v,w)$ and $(x,y,0)$ are collinear, so
+\[
+  \frac{u-0}{x-0} = \frac{v-0}{y-0} = \frac{w-1}{-1}.
+\]
+Solving the first two equalities against the third gives the projection formulas
+\[
+  \boxed{\;x = \frac{u}{1-w}, \qquad y = \frac{v}{1-w}.\;}
+\]
+
+\section{The inverse map and its injectivity}
+
+\begin{example}{Recovering $(u,v,w)$ from $(x,y)$}{stereoinverse}
+For a given $(x,y)$ we recover $(u,v,w)$ by
+\[
+  u = \frac{x}{x^2+y^2+1}, \qquad
+  v = \frac{y}{x^2+y^2+1}, \qquad
+  w = \frac{x^2+y^2}{x^2+y^2+1}.
+\]
+\textbf{Derivation.} From $x=\dfrac{u}{1-w}$ and $y=\dfrac{v}{1-w}$ we get
+$\dfrac{x}{y}=\dfrac{u}{v}$, so $v=\dfrac{uy}{x}$. Also $1-w=\dfrac{u}{x}$, hence
+$\dfrac{1}{1-w}=\dfrac{x}{u}$. Substituting into the sphere equation
+$u^2+v^2+\big(w-\tfrac12\big)^2=\tfrac14$, equivalently
+$u^2+v^2 = w-w^2 = w(1-w)$, and simplifying yields
+\[
+  u^2\Big(1+\frac{y^2}{x^2}+\frac1{x^2}\Big) = \frac{w}{x}\cdot\frac{u}{x}\cdot\frac{1}{\,\cdots\,},
+\]
+which reduces to $u = \dfrac{x}{x^2+y^2+1}$, and the expressions for $v,w$ follow.
+\end{example}
+
+\subsection{Injectivity}
+
+We check the injectivity of the correspondence. Suppose two sphere points
+$(u_1,v_1,w_1)$ and $(u_2,v_2,w_2)$ project to the same plane point, so
+\[
+  \frac{u_1}{1-w_1} = \frac{u_2}{1-w_2}, \qquad \frac{v_1}{1-w_1} = \frac{v_2}{1-w_2}.
+\]
+Then
+\[
+  \frac{u_1}{u_2} = \frac{v_1}{v_2} = \frac{1-w_1}{1-w_2} = \lambda \quad(\text{say}).
+\]
+So $1-w_1=\lambda(1-w_2)$, i.e. $w_2-w_1=\lambda-\lambda w_2 - \tfrac12+\tfrac12$. Using
+$u_i^2+v_i^2+\big(w_i-\tfrac12\big)^2=\tfrac14$ for $i=1,2$ and $u_1=\lambda u_2$,
+$v_1=\lambda v_2$, one computes
+\[
+  \lambda^2 u_2^2 + \lambda^2 v_2^2 + \Big(\lambda-\lambda w_2 - \tfrac12\Big)^2 = \tfrac14,
+\]
+and after simplification (expanding and using $u_2^2+v_2^2=w_2(1-w_2)$)
+\[
+  \lambda^2 - \lambda^2 w_2 - \lambda(1-w_2) = 0
+  \;\Longrightarrow\; \lambda(\lambda-1)(1-w_2) = 0.
+\]
+Since $w_2\neq1$, either $\lambda=0$ (which forces $w_1=1$, impossible) or $\lambda=1$.
+Hence $\lambda=1$ and
+\[
+  \boxed{\;(u_1,v_1,w_1) = (u_2,v_2,w_2).\;}
+\]
+The correspondence is injective.
+
+\section{The point at infinity}
+
+Compute $x^2+y^2$ in terms of $w$. Using $u^2+v^2=w(1-w)$,
+\[
+  x^2+y^2 = \frac{u^2}{(1-w)^2} + \frac{v^2}{(1-w)^2}
+  = \frac{u^2+v^2}{(1-w)^2} = \frac{w(1-w)}{(1-w)^2} = \frac{w}{1-w}.
+\]
+Consequently:
+\begin{itemize}[leftmargin=1.4em]
+  \item If $x^2+y^2\to\infty$, then $w\to1$.
+  \item If $w\to1$, then $u^2+v^2\to0$, i.e. $u,v\to0$.
+\end{itemize}
+So, if $\abs{z}^2 = x^2+y^2\to\infty$, then $(u,v,w)\to(0,0,1)$. The north pole
+$(0,0,1)$ is therefore called the \textbf{point at infinity} in the complex plane; adding
+it to $\C$ gives the extended complex plane $\C\cup\set{\infty}$, in bijection with the
+whole sphere $S$.
+
+\begin{example}{Image of a spherical cap is the exterior of a disc}{stereocap}
+Let $U = \set{ (u,v,w)\in S \;:\; w\ge w_0 }$ for a fixed $0<w_0<1$, and let $V\subseteq\C$
+be the corresponding set in the plane. Writing $z=x+iy=\dfrac{u}{1-w}+i\dfrac{v}{1-w}$,
+we found $\abs{z}^2 = \dfrac{w}{1-w}$. On a unit sphere-type computation this rearranges to
+\[
+  w = \frac{\abs{z}^2}{\abs{z}^2+1}.
+\]
+The condition $w\ge w_0$ becomes $\dfrac{\abs{z}^2}{\abs{z}^2+1}\ge w_0$, i.e.
+$\abs{z}^2 \ge \dfrac{w_0}{1-w_0}$, that is
+\[
+  \abs{z} \;\ge\; \sqrt{\frac{w_0}{1-w_0}} \;=:\; R.
+\]
+Thus the image is
+\[
+  V = \set{ z\in\C \;:\; \abs{z} \ge R }, \qquad R = \sqrt{\frac{w_0}{1-w_0}},
+\]
+the \emph{exterior} of the circle centred at the origin with radius $R$. Geometrically, a
+cap of the sphere containing the north pole maps to the outside of a disc, consistent with
+the north pole being the point at infinity.
+\end{example}
+
+
+% ============================================================
+\chapter{Topology of the Complex Plane}
+% ============================================================
+
+\section{The metric on \texorpdfstring{$\C$}{C}}
+
+$\C$ becomes a metric space through the absolute value. For $z=a+ib$,
+\[
+  \abs{z}^2 = z\bar z = a^2+b^2, \qquad \abs{z} = \sqrt{a^2+b^2}.
+\]
+Define $\dist:\C\times\C\to\R$ by
+\[
+  \dist(z_1,z_2) = \abs{z_1-z_2}
+  = \abs{(a_1-a_2)+i(b_1-b_2)}
+  = \sqrt{(a_1-a_2)^2+(b_1-b_2)^2}.
+\]
+This is exactly the Euclidean ($\ell_2$) distance on $\R^2$, so
+\[
+  (\C,\abs{\cdot}) \;\cong\; (\R^2,\ell_2)
+\]
+as metric spaces. The \textbf{open ball} of radius $r$ about $z$ is
+\[
+  B(z,r) = \set{ w\in\C \;:\; \dist(z,w)<r } = \set{ w \;:\; \abs{z-w}<r }.
+\]
+
+\section{Convergence of sequences}
+
+\begin{definition}{Convergence}{seqconv}
+We say $z_n\to z$ if, given any $\eps>0$, there exists $n_0\in\N$ such that
+\[
+  \abs{z_n - z} < \eps \qquad \text{for all } n\ge n_0.
+\]
+\end{definition}
+
+The link with the real and imaginary parts rests on a simple inequality. For any complex
+number $z$,
+\begin{keybox}
+\centering
+$\abs{\Im(z)},\ \abs{\Re(z)} \ \le\ \abs{z} \ \le\ \abs{\Im(z)} + \abs{\Re(z)}.$
+\end{keybox}
+Applying this to $z_n-z$: from $\abs{z_n-z}<\eps$ we get
+$\abs{\Re(z_n-z)},\,\abs{\Im(z_n-z)} < \eps$. Hence
+\[
+  z_n\to z \quad\Longrightarrow\quad \Re(z_n)\to\Re(z),\quad \Im(z_n)\to\Im(z),
+\]
+and conversely, so that
+\[
+  a_n\to a,\ b_n\to b \quad\Longrightarrow\quad a_n+ib_n \to a+ib.
+\]
+Convergence in $\C$ is exactly coordinatewise convergence.
+
+\section{The topology of \texorpdfstring{$\C$}{C}}
+
+The topology on $\C$ is nothing but the product topology on $\R^2$ coming from $\R$.
+We record the basic facts.
+
+\begin{itemize}[leftmargin=1.4em]
+  \item $\C$ is a \textbf{complete} metric space (every Cauchy sequence converges).
+  \item \textbf{Heine--Borel:} the compact subsets of $\C$ are exactly those which are
+        \emph{closed and bounded}.
+  \item \textbf{Connectedness:} a set that is \emph{open and connected} is
+        \emph{path connected}, and in fact \emph{polygonally (``stair'') connected} ---
+        any two points can be joined by a path made of horizontal and vertical segments
+        lying in the set.
+\end{itemize}
+
+\begin{remark}
+The stair-connectedness of open connected sets is used repeatedly: to prove a holomorphic
+function with zero derivative is constant, one moves along horizontal and vertical
+segments and applies the one-variable mean value theorem on each.
+\end{remark}
+
+\section{Continuous functions}
+
+\begin{definition}{Continuity}{cont}
+Let $U\subseteq\C$ and let $f:U\to\C$ be given. For $z\in U$, we say $f$ is
+\textbf{continuous at $z$} if for any sequence $z_n\to z$ we have $f(z_n)\to f(z)$.
+\end{definition}
+
+Every complex function splits into real and imaginary parts. Writing $f(a+ib)=c+id$,
+\[
+  \Re(f)(a+ib) = c, \qquad \Im(f)(a+ib) = d, \qquad f = \Re(f) + i\,\Im(f),
+\]
+with $\Re(f),\Im(f):U\to\R$ real-valued functions of $(a,b)$.
+
+\begin{theorem}{Continuity via real and imaginary parts}{contreim}
+Suppose $z_n\to z$. Then $f(z_n)\to f(z)$ if and only if
+\[
+  \Re(f)(z_n)\to\Re(f)(z) \qquad\text{and}\qquad \Im(f)(z_n)\to\Im(f)(z).
+\]
+Consequently, $f$ is continuous at $z$ if and only if $\Re(f)$ and $\Im(f)$ are continuous
+at $z$.
+\end{theorem}
+
+\begin{proof}
+Immediate from the inequality $\abs{\Re(\zeta)},\abs{\Im(\zeta)}\le\abs\zeta\le
+\abs{\Re(\zeta)}+\abs{\Im(\zeta)}$ applied to $\zeta=f(z_n)-f(z)$: the left inequality
+gives the forward implication, the right inequality the reverse.
+\end{proof}
+
+
+% ============================================================
+\chapter{Differentiability}
+% ============================================================
+
+Before defining complex differentiability we recall the real theory in the three cases
+$\R\to\R$, $\R^2\to\R$ and $\R^2\to\R^2$, since complex differentiability will be a
+strengthening of real ($\R^2\to\R^2$) differentiability.
+
+\section{Real differentiability: one variable}
+
+\begin{definition}{Differentiability, $f:U(\subseteq\R)\to\R$}{diff1}
+Let $f:U(\subseteq\R)\to\R$ be given. We say $f$ is \textbf{differentiable} at $a\in U$ if
+\[
+  \lim_{h\to 0} \frac{f(a+h)-f(a)}{h} \quad\text{exists in } \R.
+\]
+This limit is denoted $f'(a)$.
+\end{definition}
+
+\subsection{Equivalent formulation}
+
+In a neighbourhood of $a$ we may write
+\[
+  f(a+h) - f(a) = \alpha\,h + h\,\eps(h),
+\]
+where $\alpha$ is a constant and $\eps(h)$ is a function which goes to $0$ as $h\to0$.
+(Here $\alpha=f'(a)$.) This ``linear approximation'' viewpoint is the one that generalises.
+
+\section{Real differentiability: \texorpdfstring{$f:U(\subseteq\R^2)\to\R$}{f from R2 to R}}
+
+\begin{definition}{Differentiability, $f:U(\subseteq\R^2)\to\R$}{diff2}
+We say $f$ is \textbf{differentiable} at a point $(a,b)\in U$ if we can write, in a
+neighbourhood of $(a,b)$,
+\[
+  f(a+h,b+k) - f(a,b) = \alpha\,h + \beta\,k + h\,\eps_1(h,k) + k\,\eps_2(h,k),
+\]
+where $\alpha,\beta$ are constants and $\eps(h,k)\to0$ as $h,k\to0$.
+\end{definition}
+
+\section{Real differentiability: \texorpdfstring{$f:U(\subseteq\R^2)\to\R^2$}{f from R2 to R2}}
+
+\begin{definition}{Differentiability, $f:U(\subseteq\R^2)\to\R^2$}{diff22}
+We say $f$ is \textbf{differentiable} at $(a,b)\in U$ if there exists a linear
+transformation $T_{(a,b)}:\R^2\to\R^2$ such that
+\[
+  f(a+h,b+k) - f(a,b) = T_{(a,b)}(h,k) + \norm{(h,k)}\,E_{(a,b)}(h,k),
+\]
+where $E_{(a,b)}(h,k)\to(0,0)$ as $\norm{(h,k)}\to0$, and
+$\norm{(h,k)}=\sqrt{h^2+k^2}$. Equivalently,
+\[
+  \lim_{(h,k)\to(0,0)} \frac{\norm{ f(a+h,b+k) - f(a,b) - T_{(a,b)}(h,k) }}{\norm{(h,k)}} = 0.
+\]
+\end{definition}
+
+\subsection{Linear transformations are differentiable}
+
+$T_{(a,b)}$ is a linear transformation; the matrix of this linear transformation, with
+respect to the standard ordered basis, is the Jacobian
+\[
+  \begin{pmatrix}
+    \pd{f_1}{x} & \pd{f_1}{y} \\[8pt]
+    \pd{f_2}{x} & \pd{f_2}{y}
+  \end{pmatrix},
+  \qquad\text{where } f=(f_1,f_2).
+\]
+
+\begin{example}{Two real-differentiable maps}{lindiff}
+\textbf{(a)} $T:\R^2\to\R^2$, $T(a,b)=(a,-b)$, is a linear transformation; hence it is
+differentiable.\\[2pt]
+\textbf{(b)} $\gamma:\C\to\C$, $z\mapsto\bar z$, i.e. $(a,b)\mapsto(a,-b)$, is
+$\R$-differentiable. (Here $\C$ is viewed as the base field $\R^2$.) We will see below
+that although it is real-differentiable, it is \emph{not} complex differentiable.
+\end{example}
+
+\section{Complex differentiability}
+
+\begin{definition}{Complex differentiability}{cdiff}
+Let $f:U(\subseteq\C)\to\C$ be given and $a\in U$. We say $f$ is \textbf{(complex)
+differentiable} at $a$ if
+\[
+  \lim_{h\to0} \frac{f(a+h)-f(a)}{h} \quad\text{exists in } \C.
+\]
+We denote the limit by $f'(a)$. \emph{Crucially, here $h$ is complex} --- the limit must
+exist as $h\to0$ through \emph{all} complex directions, not just real ones.
+\end{definition}
+
+Rewriting, $\displaystyle\lim_{h\to0}\frac{f(a+h)-f(a)}{h}-f'(a)=0$ gives
+\[
+  \lim_{h\to0} \frac{f(a+h)-f(a)-f'(a)\,h}{h} = 0
+  \;\Longrightarrow\;
+  \lim_{h\to0} \frac{\abs{ f(a+h)-f(a)-f'(a)\,h }}{\abs{h}} = 0.
+\]
+
+\subsection{Complex differentiable \texorpdfstring{$\Rightarrow$}{implies} real differentiable}
+
+Comparing the last display with Definition~\ref{def:diff22}, a function which is complex
+differentiable at a point $a\in U$ is also $\R^2$-differentiable there, when we regard
+$a=(b,c)$ in $\R^2$; the linear map is $h\mapsto f'(a)\,h$ (multiplication by the complex
+number $f'(a)$).
+
+\begin{caution}
+\textbf{What about the converse?} Real differentiability does \emph{not} imply complex
+differentiability. We know that $\gamma:\C\to\C$, $z\mapsto\bar z$, is real differentiable
+(it is a linear transformation). But
+\[
+  \lim_{h\to0}\frac{\gamma(a+h)-\gamma(a)}{h}
+  = \lim_{h\to0}\frac{\overline{h}}{h}
+  =
+  \begin{cases}
+    1, & h\in\R \ (\text{real axis}),\\[2pt]
+    -1, & h\in i\R \ (\text{imaginary axis}).
+  \end{cases}
+\]
+The two directional limits disagree, so the limit \textbf{does not exist}: $z\mapsto\bar z$
+is not complex differentiable anywhere. Thus
+\[
+  \text{complex differentiable} \;\Longrightarrow\; \text{real differentiable},
+  \qquad \text{but the converse need not be true.}
+\]
+\end{caution}
+
+\subsection{The matrix of \texorpdfstring{$f'(a)$}{f'(a)} and the first appearance of Cauchy--Riemann}
+
+If we regard the complex-linear map $h\mapsto f'(a)\,h$ as a real-linear map and write
+$f'(a)=c+id$, its matrix is the multiplication matrix
+\[
+  [\,f'(a)\,] = [\,c+id\,] = \begin{pmatrix} c & -d \\ d & c \end{pmatrix}.
+\]
+On the other hand, viewing $f=(f_1,f_2)$ as a map $\R^2\to\R^2$, the matrix of the
+derivative with respect to the standard ordered basis is the Jacobian
+\[
+  \begin{pmatrix}
+    \pd{f_1}{x} & \pd{f_1}{y} \\[8pt]
+    \pd{f_2}{x} & \pd{f_2}{y}
+  \end{pmatrix}.
+\]
+Comparing the two matrices entry by entry forces
+\[
+  \boxed{\;\pd{f_1}{x} = \pd{f_2}{y}, \qquad \pd{f_1}{y} = -\,\pd{f_2}{x}.\;}
+\]
+These are the \textbf{Cauchy--Riemann equations}, developed fully in the next chapter.
+
+\begin{example}{Basic complex-differentiable maps}{cdiffbasic}
+The following are (complex) differentiable on $\C$:
+\[
+  z\mapsto z, \qquad z\mapsto z^2, \qquad z\mapsto P(z)\ (\text{any polynomial}),
+  \qquad z\mapsto e^{z}.
+\]
+\end{example}
+
+\begin{remark}
+If $f$ is differentiable at $a\in U$, then $f$ is continuous at $a$:
+\[
+  \lim_{h\to0}\bigl(f(a+h)-f(a)\bigr)
+  = \lim_{h\to0}\frac{f(a+h)-f(a)}{h}\cdot \lim_{h\to0} h
+  = f'(a)\cdot 0 = 0.
+\]
+\end{remark}
+
+\section{Algebra of differentiable functions}
+
+\begin{propos}{Algebra of derivatives}{algebra}
+Let $f,g:U\to\C$ be given, $a\in U$, and suppose $f,g$ are differentiable at $a$. Then:
+\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2em]
+  \item $f\pm g$, $fg$ and $cf$ are differentiable at $a$, with
+  \[
+    (f\pm g)'(a) = f'(a)\pm g'(a),\qquad
+    (fg)'(a) = f'(a)g(a)+f(a)g'(a),\qquad
+    (cf)'(a) = c\,f'(a).
+  \]
+  \item If $g(a)\ne0$, then $f/g$ is differentiable at $a$ and
+  \[
+    \Big(\frac{f}{g}\Big)'(a) = \frac{f'(a)g(a) - g'(a)f(a)}{g(a)^2}.
+  \]
+  In particular $\Big(f\cdot\frac1g\Big)'(a)$ is given by the same expression.
+\end{enumerate}
+\end{propos}
+
+\section{The chain rule}
+
+\begin{theorem}{Chain rule}{chain}
+Let $g:U\to\C$ and $f:V\to\C$ be differentiable with $g(U)\subseteq V$. Then
+$f\circ g:U\to\C$ is differentiable and
+\[
+  (f\circ g)'(z) = f'\!\bigl(g(z)\bigr)\,g'(z).
+\]
+\end{theorem}
+
+\begin{corollary}{}{chaincor}
+$\displaystyle \Big(\frac{1}{g(z)}\Big)' = -\,\frac{1}{g(z)^2}\,g'(z).$
+\end{corollary}
+
+\begin{proof}[Proof of the chain rule]
+Take $z_0\in U$; we must show
+\[
+  \lim_{h\to0} \frac{f\bigl(g(z_0+h)\bigr) - f\bigl(g(z_0)\bigr)}{h}
+  \quad\text{exists and equals } f'\!\bigl(g(z_0)\bigr)\,g'(z_0) =: S.
+\]
+Let $h_n$ be a sequence with $h_n\to0$. We analyse
+\[
+  \frac{f\bigl(g(z_0+h_n)\bigr) - f\bigl(g(z_0)\bigr)}{h_n}
+  = \frac{f\bigl(g(z_0+h_n)\bigr) - f\bigl(g(z_0)\bigr)}{g(z_0+h_n)-g(z_0)}
+    \cdot \frac{g(z_0+h_n)-g(z_0)}{h_n}.
+\]
+
+\textbf{Case 1.} Suppose for all but finitely many $n$ we have $g(z_0+h_n)-g(z_0)\ne0$.
+Then the first factor $\to f'(g(z_0))$ (as $h_n\to0$ forces $g(z_0+h_n)\to g(z_0)$ by
+continuity of $g$) and the second factor $\to g'(z_0)$. Their product $\to S$.
+
+\textbf{Case 2.} Suppose $g(z_0+h_n)=g(z_0)$ for infinitely many $n$. Divide the indices
+into two (infinite) sets
+\[
+  I_1 = \set{ n : g(z_0+h_n) = g(z_0) }, \qquad
+  I_2 = \set{ n : g(z_0+h_n) \ne g(z_0) }.
+\]
+Along $I_1$, the difference quotient for $g$ is $0$, so
+\[
+  g'(z_0) = \lim_{\substack{n\to\infty\\ n\in I_1}} \frac{g(z_0+h_n)-g(z_0)}{h_n} = 0,
+\]
+and also, since $f(g(z_0+h_n))=f(g(z_0))$ for $n\in I_1$,
+\[
+  \lim_{\substack{n\to\infty\\ n\in I_1}} \frac{f\bigl(g(z_0+h_n)\bigr) - f\bigl(g(z_0)\bigr)}{h_n} = 0 = S.
+\]
+Along $I_2$ we are in the situation of Case~1:
+\[
+  \lim_{\substack{n\to\infty\\ n\in I_2}} \frac{f\bigl(g(z_0+h_n)\bigr) - f\bigl(g(z_0)\bigr)}{h_n}
+  = f'\!\bigl(g(z_0)\bigr)\,g'(z_0) = S.
+\]
+Both subsequences tend to $S$, hence the whole sequence does. As $h_n\to0$ was arbitrary,
+the limit exists and equals $S$.
+\end{proof}
+
+
+% ============================================================
+\chapter{The Cauchy--Riemann Equations}
+% ============================================================
+
+\section{Necessary condition for differentiability}
+
+\begin{theorem}{Cauchy--Riemann (necessity)}{crnec}
+Let $f:U\to\C$ be such that $f$ is differentiable at a point $z_0\in U$. Then the partial
+derivatives $f_x$ and $f_y$ at $z_0$ exist and satisfy the identity
+\[
+  \boxed{\,f_y(z_0) = i\,f_x(z_0).\,}
+\]
+\end{theorem}
+
+Recall the meaning of the partials. With $z_0=a+ib$ and $h\in\R$,
+\[
+  f_x(z_0) = \lim_{h\to0}\frac{f(z_0+h)-f(z_0)}{h}
+           = \lim_{h\to0}\frac{f(a+h+ib)-f(a+ib)}{h},
+\]
+\[
+  f_y(z_0) = \lim_{h\to0}\frac{f\bigl(a+i(b+h)\bigr)-f(a+ib)}{h}.
+\]
+
+\begin{remark}
+If $f$ is differentiable at $z_0$, then $f'(z_0)=f_x(z_0)$.
+\end{remark}
+
+\begin{proof}
+Given that $f$ is differentiable at $z_0$, the limit
+\[
+  \lim_{h\to0}\frac{f(z_0+h)-f(z_0)}{h}
+\]
+exists and is \emph{independent of the path along which $h\to0$}.
+
+\emph{Path along the real axis.} Choose $h\to0$ with $h\in\R$. Then the difference
+quotient is exactly the definition of $f_x$, so
+\[
+  f'(z_0) = f_x(z_0).
+\]
+
+\emph{Path along the imaginary axis.} We also have
+$f'(z_0)=\lim_{h\to0}\frac{f(z_0+h)-f(z_0)}{h}$ with $h\in i\R$. Writing $h=ik$ with
+$k\in\R$ and $k\to0$,
+\[
+  f'(z_0) = \lim_{\substack{k\to0\\ k\in\R}} \frac{f(a+ib+ik)-f(a+ib)}{ik}
+          = \lim_{\substack{k\to0\\ k\in\R}} \frac{f\bigl(a+i(b+k)\bigr)-f(a+ib)}{ik}
+          = \frac1i\,f_y(z_0).
+\]
+Hence
+\[
+  f_x(z_0) = f'(z_0) = \frac1i\,f_y(z_0)
+  \;\Longrightarrow\; \boxed{\,f_y(z_0) = i\,f_x(z_0).\,}\qedhere
+\]
+\end{proof}
+
+\section{Cauchy--Riemann in terms of \texorpdfstring{$u$}{u} and \texorpdfstring{$v$}{v}}
+
+Write $f=u+iv$ with $u,v:U\to\R$, $u=\Re(f)$, $v=\Im(f)$. Then
+\[
+  f_x = u_x + i v_x, \qquad f_y = u_y + i v_y .
+\]
+The identity $f_y=i f_x$ reads
+\[
+  u_y + i v_y = i(u_x + i v_x) = -v_x + i u_x,
+\]
+and equating real and imaginary parts gives the classical form:
+\begin{keybox}
+\centering
+$u_x = v_y \qquad\text{and}\qquad u_y = -\,v_x \qquad\text{(at } z_0).$
+\end{keybox}
+
+\section{The converse fails}
+
+\begin{caution}
+\textbf{What about the converse?} Let $f:U\to\C$ satisfy $f_y(z_0)=i f_x(z_0)$ at some
+point $z_0\in U$. Does it follow that $f$ is differentiable at $z_0$? \textbf{No.}
+\end{caution}
+
+\begin{example}{CR at a point does not imply differentiability}{crfail}
+Consider
+\[
+  f(z) = f(x,y) =
+  \begin{cases}
+    \dfrac{xy(x+iy)}{x^2+y^2}, & z\ne0,\\[8pt]
+    0, & z=0,
+  \end{cases}
+  \qquad\text{i.e.}\qquad
+  f(z)=\begin{cases}\dfrac{\Re(z)\,\Im(z)\,z}{\abs{z}^2}, & z\ne0,\\[6pt] 0, & z=0.\end{cases}
+\]
+\textbf{Partials at $0$.} Along the axes,
+\[
+  f_x(0)=\lim_{\substack{h\to0\\ h\in\R}}\frac{f(0+h)-f(0)}{h}=0,\qquad
+  f_y(0)=\lim_{\substack{h\to0\\ h\in\R}}\frac{f(0+ih)-f(0)}{h}=0,
+\]
+so $f_y(0)=i f_x(0)$ holds ($0=i\cdot0$): the Cauchy--Riemann equations are satisfied at
+$0$.
+
+\textbf{But the derivative does not exist.} Write $h=h_1+ih_2$. Then
+\[
+  \lim_{h\to0}\frac{f(h)-f(0)}{h}
+  = \lim_{h\to0}\frac{\Re(h)\Im(h)\,h}{\abs{h}^2\,h}
+  = \lim_{(h_1,h_2)\to0}\frac{h_1 h_2}{h_1^2+h_2^2}.
+\]
+Taking $h_2=m h_1$ this equals $\dfrac{m}{1+m^2}$, which depends on the direction $m$.
+The limit \textbf{does not exist}, so $f$ is not differentiable at $0$ even though the
+Cauchy--Riemann equations hold there.
+\end{example}
+
+\section{A sufficient condition (partial converse)}
+
+The remedy is to add continuity of the partials. First the underlying real-analysis fact.
+
+\begin{theorem}{Result from calculus}{calcresult}
+Let $f:U(\subseteq\R^2)\to\R$ be such that $f_x,f_y$ exist at $(a,b)\in U$, and one of them
+exists in a neighbourhood of $(a,b)$ and is continuous at $(a,b)$. Then $f$ is
+(real) differentiable at $(a,b)$.
+\end{theorem}
+
+\begin{theorem}{Partial converse of Cauchy--Riemann}{crconv}
+Let $f:U\to\C$ be given, and suppose $f_x,f_y$ exist in $U$, with $f_y = i f_x$ at $z_0$,
+and $f_x,f_y$ continuous in $U$. Then $f$ is differentiable at $z_0$.
+\end{theorem}
+
+\begin{proof}
+We must show
+\[
+  \lim_{h\to0}\frac{f(z_0+h)-f(z_0)}{h} \quad\text{exists and equals}\quad u_x(z_0)+i v_x(z_0).
+\]
+Write $z_0=a_0+ib_0=(a_0,b_0)$ and $h=a+ib=(a,b)$, and $f=u+iv$. Consider the increment of
+$u$, split by moving first in $y$ then in $x$:
+\[
+  \frac{u(z_0+h)-u(z_0)}{h}
+  = \frac{u(a_0+a,\,b_0+b) - u(a_0+a,\,b_0) + u(a_0+a,\,b_0) - u(a_0,b_0)}{a+ib}.
+\]
+Group and insert the factors $b$ and $a$:
+\[
+  = \frac{u(a_0+a,\,b_0+b) - u(a_0+a,\,b_0)}{b}\cdot\frac{b}{a+ib}
+    + \frac{a}{a+ib}\cdot\frac{u(a_0+a,\,b_0)-u(a_0,b_0)}{a}.
+\]
+Apply the one-variable \textbf{Mean Value Theorem} in each bracket (in the first, the
+$x$-coordinate is fixed at $a_0+a$ and we vary $y$; in the second we vary $x$):
+\[
+  = \frac{b}{a+ib}\,u_y\bigl(a_0+a,\,b_0+\lambda b\bigr)
+    + \frac{a}{a+ib}\,u_x\bigl(a_0+\mu a,\,b_0\bigr),
+  \qquad \lambda,\mu\in(0,1).
+\]
+Likewise for $v$,
+\[
+  \frac{v(z_0+h)-v(z_0)}{h}
+  = \frac{b}{a+ib}\,v_y\bigl(a_0+a,\,b_0+\lambda' b\bigr)
+    + \frac{a}{a+ib}\,v_x\bigl(a_0+\mu' a,\,b_0\bigr),
+  \qquad \lambda',\mu'\in(0,1).
+\]
+Adding, and writing the evaluation points collectively as $z_1,z_2,z_3,z_4\to z_0$ as
+$h\to0$,
+\[
+  \frac{f(z_0+h)-f(z_0)}{h}
+  = \frac{b}{a+ib}\bigl[u_y(z_1)+i v_y(z_2)\bigr]
+    + \frac{a}{a+ib}\bigl[u_x(z_3)+i v_x(z_4)\bigr].
+\]
+Compare this with the candidate limit. Using $\dfrac{a+ib}{a+ib}f_x(z_0)$ and the
+Cauchy--Riemann identity $f_y(z_0)=i f_x(z_0)$,
+\[
+  f_x(z_0)
+  = \frac{a+ib}{a+ib}f_x(z_0)
+  = \frac{a}{a+ib}f_x(z_0) + \frac{ib}{a+ib}f_x(z_0)
+  = \frac{a}{a+ib}f_x(z_0) + \frac{b}{a+ib}f_y(z_0),
+\]
+i.e.
+\[
+  f_x(z_0)
+  = \frac{a}{a+ib}\bigl[u_x(z_0)+i v_x(z_0)\bigr]
+    + \frac{b}{a+ib}\bigl[u_y(z_0)+i v_y(z_0)\bigr].
+\]
+Subtracting,
+\[
+  \abs{\frac{f(z_0+h)-f(z_0)}{h} - f_x(z_0)}
+  \le \abs{\tfrac{a}{a+ib}}\bigl\lvert (u_x(z_3)-u_x(z_0)) + i(v_x(z_4)-v_x(z_0))\bigr\rvert
+\]
+\[
+  \qquad\qquad + \abs{\tfrac{b}{a+ib}}\bigl\lvert (u_y(z_1)-u_y(z_0)) + i(v_y(z_2)-v_y(z_0))\bigr\rvert .
+\]
+Since $\big\lvert\frac{a}{a+ib}\big\rvert,\big\lvert\frac{b}{a+ib}\big\rvert\le1$ and the
+partials are continuous, as $h\to0$ (so $z_1,z_2,z_3,z_4\to z_0$) the right-hand side
+$\to0$. Therefore
+\[
+  \lim_{h\to0}\frac{f(z_0+h)-f(z_0)}{h} - f_x(z_0) = 0,
+\]
+so the derivative exists at $z_0$.
+\end{proof}
+
+\begin{example}{Points of differentiability of $f(z)=\abs{z}^2$}{modsq}
+Consider $f:\C\to\C$, $f(z)=\abs{z}^2$, i.e. $f(x,y)=x^2+y^2$ (so $u=x^2+y^2$, $v=0$).
+\textbf{Check Cauchy--Riemann.}
+\[
+  f_x = 2x, \qquad f_y = 2y, \qquad u_x=2x,\ u_y=2y,\ v_x=v_y=0.
+\]
+The condition $f_y = i f_x$ reads $2y = i\,2x$, i.e. $2y = 2ix$, which (comparing) forces
+$x=0$ and $y=0$. Hence the Cauchy--Riemann equations are satisfied \emph{only at $z=0$}.
+Moreover $f_x,f_y$ are continuous everywhere, in particular in a neighbourhood of $0$; by
+the partial-converse theorem, $f$ is differentiable at $0$.
+\end{example}
+
+\begin{remark}
+So $f(z)=\abs{z}^2$ is differentiable \emph{only} at the single point $0$. We generally do
+not want such isolated points of differentiability --- this motivates the notion of
+holomorphicity, which demands differentiability throughout an open set.
+\end{remark}
+
+
+% ============================================================
+\chapter{Holomorphic Functions}
+% ============================================================
+
+\section{Definition}
+
+\begin{definition}{Holomorphic function}{holo}
+Let $U\subseteq\C$ be open, let $f:U\to\C$ be given, and $z_0\in U$. We say $f$ is
+\textbf{holomorphic at $z_0$} if there exists a neighbourhood of $z_0$ where $f$ is
+differentiable. We say $f$ is \textbf{holomorphic on $U$} if $f$ is holomorphic at every
+point of $U$ --- equivalently, if $f$ is differentiable on $U$.
+\end{definition}
+
+Throughout, $D$ denotes a \textbf{domain}: an open and connected subset of $\C$. We write
+\[
+  \Hol(D) = \set{ \text{holomorphic functions on } D }.
+\]
+
+\section{Property 1: zero derivative forces constancy}
+
+\begin{propos}{}{prop1}
+Let $D$ be a domain and $f\in\Hol(D)$ with $f'=0$ on $D$. Then $f$ is constant.
+\end{propos}
+
+The key is the following real-variable lemma.
+
+\begin{lemma}{}{constlemma}
+Let $D$ be a domain and $g:D\to\R$ be such that $g_x,g_y$ vanish identically on $D$. Then
+$g$ is constant on $D$.
+\end{lemma}
+
+\begin{proof}[Proof of Proposition (using the Lemma)]
+Let $z_0\in D$. Since $f'(z_0)=f_x(z_0)=u_x(z_0)+i v_x(z_0)=0$, we get
+$u_x(z_0)=0$ and $v_x(z_0)=0$. By the Cauchy--Riemann equations,
+$v_y = u_x = 0$ and $u_y = -v_x = 0$. Hence
+\[
+  u_x\equiv0,\ u_y\equiv0 \quad\text{and}\quad v_x\equiv0,\ v_y\equiv0 \ \text{on } D.
+\]
+By the Lemma, $u$ is constant and $v$ is constant, so $f=u+iv$ is constant.
+\end{proof}
+
+\begin{proof}[Proof of the Lemma]
+Fix two points and join them by horizontal/vertical segments inside $D$ (possible since
+$D$ is open and connected, hence stair-connected). On a horizontal segment from
+$(a,b)$ to $(a',b)$, the Mean Value Theorem gives, for some $a''$ between $a$ and $a'$,
+\[
+  \frac{g(a',b)-g(a,b)}{a'-a} = g_x(a'',b) = 0
+  \;\Longrightarrow\; g(a',b) = g(a,b).
+\]
+Similarly along a vertical segment from $(a',b)$ to $(a',b')$, for some $b''$ between
+$b$ and $b'$,
+\[
+  \frac{g(a',b')-g(a',b)}{b'-b} = g_y(a',b'') = 0
+  \;\Longrightarrow\; g(a',b') = g(a',b).
+\]
+Chaining finitely many such segments joins any two points of $D$ with equal $g$-values, so
+$g$ is constant.
+\end{proof}
+
+\section{How to check holomorphicity}
+
+Given $f=u+iv$, the practical test combines the Cauchy--Riemann equations with continuity:
+\begin{itemize}[leftmargin=1.4em]
+  \item If the Cauchy--Riemann equations $u_x=v_y,\ u_y=-v_x$ fail at a point, $f$ is
+        \emph{not} holomorphic there.
+  \item If $u_x,u_y,v_x,v_y$ are continuous \emph{and} the Cauchy--Riemann equations hold,
+        then $f$ is holomorphic (by the partial-converse theorem).
+\end{itemize}
+
+\subsection{Harmonic functions}
+
+If $u$ is the real part of a holomorphic function then, differentiating the
+Cauchy--Riemann equations,
+\[
+  u_{xx} + u_{yy} = 0,
+\]
+i.e. $u$ is \textbf{harmonic}. (From $u_x=v_y$ and $u_y=-v_x$: $u_{xx}=v_{yx}$ and
+$u_{yy}=-v_{xy}$, which cancel by equality of mixed partials.)
+
+\section{Examples of constancy}
+
+\begin{example}{Constant real part $\Rightarrow$ constant function}{uconst}
+Let $D$ be a domain and $f=u+iv\in\Hol(D)$. Prove: if $u$ (the real part) is constant,
+then $f$ is constant.\\[3pt]
+\textbf{Solution.} $u$ constant gives $u_x=0$, $u_y=0$. By Cauchy--Riemann,
+$v_y=u_x=0$ and $v_x=-u_y=0$. Hence $u$ and $v$ are both constant, so $f=u+iv$ is
+constant.
+\end{example}
+
+\begin{corollary}{}{cCtoR}
+A holomorphic function $f:\C\to\R$ must be constant. (Its imaginary part is $\equiv0$,
+hence constant, so by the previous example $f$ is constant.)
+\end{corollary}
+
+\begin{example}{Constant modulus $\Rightarrow$ constant function}{modconst}
+Let $D$ be a domain and $f=u+iv\in\Hol(D)$ with $\abs{f}$ constant. Then $f$ is constant.
+\\[3pt]
+\textbf{Solution.} Write $\abs{f}^2 = u^2+v^2$.
+\emph{Case $\abs{f}^2=0$:} then $u^2+v^2=0$, so $u=0$ and $v=0$, and $f$ is constant.
+\emph{Case $\abs{f}^2 = c\ (\text{const})$:} differentiating $u^2+v^2=c$,
+\[
+  u u_x + v v_x = 0, \qquad u u_y + v v_y = 0.
+\]
+Using Cauchy--Riemann $u_x=v_y,\ u_y=-v_x$:
+\[
+  u u_x - v u_y = 0 \quad(1), \qquad u u_y + v u_x = 0 \quad(2).
+\]
+From $(1)$, $u_x = \dfrac{v}{u}u_y$ (assuming $u\ne0$); substitute into $(2)$:
+\[
+  u u_y + \frac{v^2}{u}u_y = 0
+  \;\Longrightarrow\; u_y\Big(\frac{u^2+v^2}{u}\Big) = 0
+  \;\Longrightarrow\; u_y = 0,
+\]
+since $\frac{u^2+v^2}{u}\ne0$. Similarly $u_x=0$. Hence $u$ is constant, and therefore
+$f$ is constant. (The case $u\equiv0$ is handled symmetrically using $v$.)
+\end{example}
+
+
+% ============================================================
+\chapter{Power Series}
+% ============================================================
+
+\section{Formal power series}
+
+\begin{definition}{Formal power series}{fps}
+A \textbf{formal power series} is an expression of the form
+\[
+  \sum_{n\ge0} a_n x^n, \qquad a_n\in F, \quad x\ \text{an indeterminate}.
+\]
+\end{definition}
+
+The motivating case is the geometric series $a_n=1$, i.e. $\sum_{n\ge0}x^n$. For $z\in\C$,
+the partial sums are
+\[
+  1+z+z^2+\cdots+z^n = \frac{1-z^{n+1}}{1-z}.
+\]
+If $\abs{z}<1$, then $\abs{z}^{n+1}\to0$, so the series converges:
+\[
+  \sum_{n\ge0} z^n = \frac{1}{1-z}, \qquad \abs{z}<1.
+\]
+If $\abs{z}>1$, then $\abs{z^{n+1}}\to\infty$ and the series does not converge. There is a
+\emph{threshold} radius beyond which the power series diverges and below which it
+converges.
+
+\section{Radius of convergence}
+
+\begin{definition}{Radius of convergence, disc of convergence}{roc}
+For $\sum_{n\ge0}a_n x^n$ set
+\[
+  S = \set{ r\ge0 \;:\; \sum_{n\ge0}\abs{a_n}\,r^{n} < \infty }.
+\]
+Since $0\in S$, $S$ is nonempty, and $S$ is an interval of the form $[0,\infty)$, $[0,\rho]$
+or $[0,\rho)$. Define $\rho$ to be $\sup S$ if it exists, and otherwise set
+$\rho=\infty$. The quantity $\rho$ is the \textbf{radius of convergence} of the formal
+power series, and
+\[
+  \set{ z\in\C \;:\; \abs{z}<\rho }
+\]
+is called the \textbf{disc of convergence}.
+\end{definition}
+
+\begin{example}{$\sum r^n$}{rocgeom}
+$S=\set{ r\ge0 : \sum r^n<\infty } = [0,1)$, so $\sup S = 1$ and $\rho=1$.
+\end{example}
+
+\section{Normal convergence}
+
+\begin{definition}{Normal convergence}{normalconv}
+Let $f_n:X\to\C$ ($n\ge1$) be a sequence of functions on a set $X$. Define
+\[
+  \norm{f_n}_X = \sup_{x\in X}\abs{f_n(x)}.
+\]
+We say $(f_n)_{n\ge1}$ is \textbf{normally summable} (or $\sum f_n$ \textbf{converges
+normally}) on $X$ if
+\[
+  \sum_{n\ge1}\norm{f_n}_X < \infty.
+\]
+\end{definition}
+
+\begin{example}{Consequences of normal convergence}{normalprops}
+\textbf{(1)} Normal convergence of $\sum_{n\ge1} f_n$ implies \emph{absolute} convergence
+of $\sum_{n\ge1} f_n(x)$ for every $x\in X$: indeed $\sum\sup\abs{f_n}$ converges and
+$\abs{f_n(x)}\le\sup\abs{f_n}$, hence $\sum\abs{f_n(x)}$ converges.\\[3pt]
+\textbf{(2)} Normal convergence implies \emph{uniform} convergence of $\sum_{n\ge1}f_n$
+(this is the \textbf{Weierstrass $M$-test}).\\[3pt]
+\textbf{(3)} The converse of (2) fails: uniform convergence does \emph{not} imply normal
+convergence. Take
+\[
+  f_n(x)=\frac{x^n}{n}, \qquad 0\le x<1.
+\]
+On $[0,a]$ with $0<a<1$ we have $\bigl\lvert\frac{x^n}{n}\bigr\rvert\le\frac{a^n}{n}$, and
+since $\sum\frac{a^n}{n}$ converges (comparison with the geometric series), the
+Weierstrass $M$-test gives that $\sum\frac{x^n}{n}$ converges uniformly on $[0,a]$.
+\emph{But} on $X=[0,1)$,
+\[
+  \sup_{[0,1)}\frac{x^n}{n} = \frac1n, \qquad \sum\frac1n = \infty,
+\]
+so the series is \emph{not} normally convergent on $[0,1)$.
+\end{example}
+
+\section{Convergence of a power series inside its disc}
+
+\begin{theorem}{Normal convergence on compact subdiscs}{fpsnormal}
+Consider a formal power series $\sum_{n\ge0}a_n x^n$ with radius of convergence $\rho$.
+Then for any $r<\rho$ the series $\sum_{n\ge0}a_n z^n$ converges \emph{normally} on
+$\set{ z : \abs{z}\le r }$. The series does not converge for $\abs{z}>\rho$.
+\end{theorem}
+
+The engine of the proof is Abel's lemma.
+
+\begin{lemma}{Abel's Lemma}{abel}
+Let $0<r<r_0$. Suppose there exists $M>0$ such that $\abs{a_n}\,r_0^{\,n}\le M$ for all
+sufficiently large $n$. Then $\sum_{n\ge0}a_n x^n$ converges normally on
+$D=\set{ \abs{z}\le r }$.
+\end{lemma}
+
+\begin{proof}[Proof of Abel's Lemma]
+On $D$,
+\[
+  \norm{a_n z^n}_D \le \abs{a_n}\,r^{n}
+  = \abs{a_n}\,r_0^{\,n}\Big(\frac{r}{r_0}\Big)^n
+  \le M\Big(\frac{r}{r_0}\Big)^n \qquad\text{for large enough } n.
+\]
+Since $\frac{r}{r_0}<1$, summing the geometric bound,
+\[
+  \sum_{n\ge0}\norm{a_n z^n}_D \le \sum_{n\ge0} M\Big(\frac{r}{r_0}\Big)^n
+  = M\cdot\frac{1}{\,1-\frac{r}{r_0}\,} < \infty.
+\]
+Hence $\sum_{n\ge0}\norm{a_n z^n}_D<\infty$, i.e. the series converges normally on $D$.
+\end{proof}
+
+\begin{proof}[Proof of the Theorem]
+Let $r<\rho$ be given; pick $r_0$ with $0\le r<r_0<\rho$. By definition of $\rho$,
+$\sum_{n\ge0}\abs{a_n}\,r_0^{\,n}<\infty$; in particular the general term is bounded, say
+$\abs{a_n}\,r_0^{\,n}\le M$ for all $n\ge0$. Abel's Lemma now gives normal convergence on
+$\set{\abs{z}\le r}$.
+
+For divergence when $\abs{z}>\rho$: we show $(a_n z^n)$ is unbounded, hence
+$\sum a_n z^n$ cannot converge. Suppose, for contradiction, $\abs{a_n z^n}=\abs{a_n}\abs{z}^n\le M$
+for all $n$. Choose $R$ with $\rho<R<\abs{z}$. Then
+\[
+  \abs{a_n}\,R^n = \abs{a_n}\abs{z}^n\Big(\frac{R}{\abs{z}}\Big)^n
+  \le M\Big(\frac{R}{\abs{z}}\Big)^n,
+\]
+so $\sum_{n\ge0}\abs{a_n}R^n<\infty$, forcing $R\in S$ with $\rho<R$ --- contradicting
+$\rho=\sup S$.
+\end{proof}
+
+\section{Formulas for the radius of convergence}
+
+\begin{theorem}{Hadamard's formula}{hadamard}
+For a formal power series $\sum_{n\ge0}a_n x^n$, the radius of convergence $\rho$ is given
+by
+\[
+  \boxed{\ \frac1\rho = \limsup_{n\to\infty}\abs{a_n}^{1/n}.\ }
+\]
+\end{theorem}
+
+\begin{theorem}{Ratio formula}{ratio}
+For $\sum_{n\ge0}a_n x^n$, suppose $\displaystyle\lim_{n\to\infty}\Big\lvert\frac{a_n}{a_{n+1}}\Big\rvert$
+exists in $[0,\infty)\cup\set{\infty}$. Then
+\[
+  \boxed{\ \rho = \lim_{n\to\infty}\Big\lvert\frac{a_n}{a_{n+1}}\Big\rvert.\ }
+\]
+\end{theorem}
+
+\section{Differentiability of a power series}
+
+Inside the disc of convergence a power series defines an infinitely differentiable
+function, and one may differentiate term by term.
+
+\begin{theorem}{Term-by-term differentiation}{fpsdiff}
+Let $\sum_{n\ge0}a_n x^n$ be a formal power series with radius of convergence $\rho>0$.
+Then:
+\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2em]
+  \item The series $\displaystyle\sum_{n\ge k} a_n\, n(n-1)\cdots(n-k+1)\,x^{n-k}$ has
+        radius of convergence $\rho$.
+  \item For any $a\in\C$, the function
+        $f(z)=\displaystyle\sum_{n\ge0}a_n(z-a)^n$ is infinitely differentiable in
+        $B(a,\rho)=\set{ z : \abs{z-a}<\rho }$, and
+        \[
+          f^{(k)}(z)=\sum_{n\ge k} a_n\, n(n-1)\cdots(n-k+1)\,(z-a)^{n-k}
+        \]
+        for all $k\ge1$ and $\abs{z-a}<\rho$.
+  \item For every $n\ge0$,
+        \[
+          \boxed{\ a_n = \frac{1}{n!}\,f^{(n)}(a).\ }
+        \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(1)} It suffices to treat $k=1$: the series $\sum_{n\ge0} a_n n\,x^{n-1}$ has
+radius $\rho_0$ with
+\[
+  \frac{1}{\rho_0} = \limsup_{n\to\infty}\abs{n\,a_n}^{1/(n-1)}.
+\]
+Since $\lim_{n\to\infty} n^{1/(n-1)} = 1$, one gets
+$\rho_0 = \big(\limsup\abs{a_n}^{1/(n-1)}\big)^{-1} = \rho$. Concretely, if
+$0\le r<\rho_0$ then from $\sum\abs{a_n}r^n<\infty$ one deduces
+$\sum\abs{a_{n+1}}r^{n+1}<\infty$, hence $\sum\abs{a_n}r^n<\infty$, giving $r\le\rho$ and
+so $\rho_0\le\rho$; conversely if $0\le r<\rho$ then
+$r\sum\abs{a_n}r^{n-1}\le\sum\abs{a_n}r^n<\infty$ shows $\sum\abs{a_n}r^{n-1}<\infty$ and
+so $\sum\abs{a_{n+1}}r^n<\infty$, giving $r\le\rho_0$ and $\rho\le\rho_0$. Thus
+$\rho_0=\rho$.
+
+\textbf{(2)} We prove the case $k=1$; the general case follows by induction. Fix
+$w\in B(a,\rho)$; we show $f'(w)=g(w)$ where
+$g(z)=\sum_{n\ge1}n\,a_n(z-a)^{n-1}$. Choose $r$ with $\abs{a-w}<r<\rho$. Write the
+partial sum $S_n(z)=\sum_{k=0}^{n} a_k(z-a)^k$ and tail
+$\sigma_n(z)=\sum_{k>n} a_k(z-a)^k$. For $z\ne w$,
+\[
+  \frac{f(z)-f(w)}{z-w} - g(w)
+  = \underbrace{\Big(\frac{S_n(z)-S_n(w)}{z-w} - S_n'(w)\Big)}_{\text{partial-sum term}}
+  + \underbrace{\bigl(S_n'(w)-g(w)\bigr)}_{\text{2nd term}}
+  + \underbrace{\frac{\sigma_n(z)-\sigma_n(w)}{z-w}}_{\text{3rd (remainder) term}} .
+\]
+
+\emph{Third term.} Using $(z-a)^k-(w-a)^k=\bigl((z-a)-(w-a)\bigr)\sum \cdots$,
+\[
+  \frac{\sigma_n(z)-\sigma_n(w)}{z-w}
+  = \frac{1}{z-w}\sum_{k>n} a_k\bigl\{(z-a)^k-(w-a)^k\bigr\},
+\]
+and each bracket satisfies
+\[
+  \left\lvert\frac{(z-a)^k-(w-a)^k}{(z-a)-(w-a)}\right\rvert
+  = \bigl\lvert (z-a)^{k-1}+(z-a)^{k-2}(w-a)+\cdots+(w-a)^{k-1}\bigr\rvert
+  \le k\,r^{k-1}.
+\]
+Hence
+\[
+  \bigl\lvert\text{3rd term}\bigr\rvert \le \sum_{k>n}\abs{a_k}\,k\,r^{k-1},
+\]
+the tail of the convergent series $\sum_{k\ge1}a_k k\,x^{k-1}$ (radius $\rho>r$ by (1)).
+Given $\eps>0$, choose $n_0$ with $\bigl\lvert\text{3rd term}\bigr\rvert<\eps/3$ for
+$n\ge n_0$.
+
+\emph{Second term.} $S_n'(w)=\sum_{k=1}^{n}k\,a_k(w-a)^{k-1}\to g(w)$ as $n\to\infty$, so
+choose $n_1$ with $\abs{S_n'(w)-g(w)}<\eps/3$ for $n\ge n_1$. Put $n_\eps=\max(n_0,n_1)$;
+then $\bigl\lvert\text{2nd}\bigr\rvert+\bigl\lvert\text{3rd}\bigr\rvert<2\eps/3$.
+
+\emph{Partial-sum (first) term.} $S_{n_\eps}$ is a polynomial, hence differentiable at
+$w$; choose $\delta>0$ with
+$\bigl\lvert\frac{S_{n_\eps}(z)-S_{n_\eps}(w)}{z-w}-S_{n_\eps}'(w)\bigr\rvert<\eps/3$ for
+$z\in B(w,\delta)$. Then for all such $z$,
+\[
+  \left\lvert \frac{f(z)-f(w)}{z-w} - g(w) \right\rvert < \eps.
+\]
+Since $\eps>0$ was arbitrary, $f'(w)=g(w)$.
+
+\textbf{(3)} From (2), $f^{(k)}(z)=\sum_{n\ge k}a_n n(n-1)\cdots(n-k+1)(z-a)^{n-k}$. Put
+$z=a$: all terms with $n>k$ vanish, leaving
+\[
+  f^{(k)}(a) = a_k\, k(k-1)\cdots 1 = k!\,a_k,
+  \qquad\text{i.e.}\qquad a_k = \frac{f^{(k)}(a)}{k!}. \qedhere
+\]
+\end{proof}
+
+\begin{corollary}{}{fpsholo}
+Let $\sum_{n\ge0}a_n x^n$ be a formal power series with radius of convergence $\rho>0$.
+Then for any $a\in\C$, the function $f(z)=\sum_{n\ge0}a_n(z-a)^n$ defines a holomorphic
+function on $B(a,\rho)$.
+\end{corollary}
+
+\begin{example}{The exponential series}{expseries}
+Consider $\sum_{n\ge0}\dfrac{x^n}{n!}$, so $a_n=\dfrac1{n!}$. By the ratio formula,
+\[
+  \left\lvert\frac{a_n}{a_{n+1}}\right\rvert = \frac{(n+1)!}{n!} = n+1 \to\infty,
+\]
+so $\rho=+\infty$: the series converges for every $z\in\C$. For $z\in\C$ the function
+\[
+  e^z := \sum_{n\ge0}\frac{z^n}{n!}
+\]
+is holomorphic on all of $\C$ (the \textbf{exponential function}).
+\end{example}
+
+
+% ============================================================
+\chapter{The Elementary Functions}
+% ============================================================
+
+\begin{definition}{Entire function}{entire}
+A function which is holomorphic on all of $\C$ is called an \textbf{entire function}.
+\end{definition}
+Examples: polynomials and the exponential function.
+
+\section{The exponential function}
+
+We have $e^z=\sum_{n\ge0}\dfrac{z^n}{n!}$, and its derivative is again itself:
+\[
+  \frac{d}{dz}e^z = \sum_{n\ge1} n\,\frac{z^{n-1}}{n!} = \sum_{n\ge0}\frac{z^n}{n!} = e^z.
+\]
+
+\begin{theorem}{Addition law}{expadd}
+$e^{z_1+z_2} = e^{z_1}\,e^{z_2}$ for all $z_1,z_2\in\C$.
+\end{theorem}
+
+\begin{proof}
+Fix $z_2$ and set $g(z)=e^{z}\,e^{z_2-z}$. Then
+\[
+  g'(z) = e^{z}e^{z_2-z} - e^{z}e^{z_2-z} = 0,
+\]
+so $g$ is constant. Hence $g(z)=g(0)=e^{0}e^{z_2}=e^{z_2}$; that is
+$e^{z}e^{z_2-z}=e^{z_2}$. Putting $z=z_1$ gives $e^{z_1}e^{z_2-z_1}=e^{z_2}$, and
+replacing $z_2$ by $z_1+z_2$ yields $e^{z_1}e^{z_2}=e^{z_1+z_2}$.
+\end{proof}
+
+\begin{remark}
+The coefficients $\frac1{n!}$ are real, so $\overline{e^z}=e^{\bar z}$. Hence
+\[
+  \abs{e^z}^2 = e^z\,\overline{e^z} = e^{z}e^{\bar z} = e^{z+\bar z} = e^{2\Re(z)},
+  \qquad\text{so}\qquad \abs{e^z} = e^{\Re(z)}.
+\]
+Writing $z=x+iy$, $e^z = e^x e^{iy} = \abs{e^z}\,e^{iy}$; thus $e^z$ takes all complex
+values \emph{except} $0$ (its modulus $e^x$ is never $0$).
+\end{remark}
+
+\begin{caution}
+\textbf{The real exponential is injective; the complex exponential is NOT.} Since
+$e^{iy}=e^{i(y+2\pi)}$, we have
+\[
+  e^{z} = e^{\,z+2\pi i\,n}, \qquad n\in\Z.
+\]
+The value repeats on every horizontal strip of height $2\pi$.
+\end{caution}
+
+\section{Cosine and sine}
+
+Define, as power series,
+\[
+  \cos z = 1 - \frac{z^2}{2!} + \frac{z^4}{4!} - \cdots + (-1)^n\frac{z^{2n}}{(2n)!}+\cdots,
+\]
+\[
+  \sin z = z - \frac{z^3}{3!} + \frac{z^5}{5!} - \cdots + (-1)^n\frac{z^{2n+1}}{(2n+1)!}+\cdots.
+\]
+(Both are entire; the radius of convergence is $\infty$, using $\lim_{n\to\infty}(n!)^{1/n}=\infty$.)
+Term-by-term differentiation gives
+\[
+  (\cos z)' = -\sin z, \qquad (\sin z)' = \cos z.
+\]
+In terms of the exponential,
+\[
+  \cos z = \frac{e^{iz}+e^{-iz}}{2}, \qquad \sin z = \frac{e^{iz}-e^{-iz}}{2i},
+\]
+and the fundamental identity holds for all complex $z$:
+\begin{keybox}
+\centering
+$\cos^2 z + \sin^2 z = 1 \qquad \forall\, z\in\C.$
+\end{keybox}
+
+\section{Logarithmic functions}
+
+We try to find a function $f(z)$ such that
+\[
+  e^{f(z)} = z .
+\]
+
+\begin{remark}
+The exponential function never takes the value $0$, so $f$ can be defined only for
+\emph{nonzero} $z$. Moreover the choice of $f$ is \emph{not unique}: if $e^{f(z)}=z$ then
+$e^{f(z)+2\pi i n}=z$ as well, for every $n\in\Z$.
+\end{remark}
+
+Suppose $f(z)=u(z)+iv(z)$. From $e^{f(z)}=e^{u(z)}e^{iv(z)}=z=\abs{z}e^{i\theta}$ we read
+off
+\[
+  e^{u(z)} = \abs{z} \ \Longrightarrow\ u(z)=\log\abs{z} \ (\text{real logarithm}),
+\]
+\[
+  v(z) = \theta + 2\pi n = \Arg(z) + 2\pi n, \qquad n\in\Z .
+\]
+Hence
+\[
+  f(z) = \log\abs{z} + i\bigl(\Arg(z)+2\pi n\bigr), \qquad n\in\Z,
+\]
+where the principal argument $\Arg(z)\in(-\pi,\pi]$.
+
+Taking $n=0$ gives $f(z)=\log\abs{z}+i\Arg(z)$. We check whether $f$ is continuous.
+
+\begin{caution}
+$\Arg(z)$ is \emph{not continuous} on the negative real axis: approaching from above the
+argument tends to $\pi$, from below to $-\pi$. Restricting the argument to a range
+$(\theta,\theta+2\pi]$ removes the jump but always leaves one ray of discontinuity.
+\end{caution}
+
+\begin{definition}{Branch of the logarithm}{branch}
+We say that a continuous function $f(z)$, defined on a domain $D$ with $0\notin D$, is a
+\textbf{branch of $\log$ on $D$} if for all $z\in D$,
+\[
+  e^{f(z)} = z .
+\]
+\end{definition}
+
+\begin{example}{A branch on a slit plane}{branchslit}
+On $D=\set{ r e^{i\theta} : r>0,\ \theta\in(\alpha,\alpha+2\pi) }$ (with $\alpha\in\R$),
+\[
+  f(r e^{i\theta}) = \log r + i\theta.
+\]
+The \textbf{principal branch} of the logarithm is the case
+$D=\set{ r e^{i\theta} : r>0,\ \theta\in(-\pi,\pi) }$, with
+\[
+  \log(r e^{i\theta}) = \log r + i\theta .
+\]
+\end{example}
+
+\begin{propos}{Branches differ by $2\pi i n$}{branchdiff}
+Let $f$ be a branch of $\log$ on a domain $D$. Then any other branch $g$ of $\log$ on $D$
+looks like
+\[
+  g(z) = f(z) + 2\pi i n, \qquad n\in\Z\ \text{(fixed)}.
+\]
+\end{propos}
+
+\begin{proof}
+Let $g$ be another branch on $D$. For $z\in D$, $e^{f(z)}=z=e^{g(z)}$, so
+$e^{f(z)-g(z)}=1$, whence $f(z)-g(z)\in 2\pi i\Z$ for each $z$. Thus $f(z)-g(z)$ takes
+values in the set $2\pi i\Z$. But $f-g$ is continuous on the connected set $D$, so its
+image is connected, and the only connected subsets of the discrete set $2\pi i\Z$ are
+singletons. Therefore $f(z)-g(z)$ is constant, say $=2\pi i n_0$, and
+$g(z)=f(z)-2\pi i n_0$.
+\end{proof}
+
+\section{Continuity of a branch gives holomorphicity}
+
+\begin{theorem}{Holomorphic inverse}{holoinverse}
+Let $U,V$ be open subsets of $\C$, let $f:U\to\C$ and $g:V\to\C$ be functions with
+$f(U)\subseteq V$ and $g(f(z))=z$ for all $z\in U$. If $g$ is holomorphic on $V$ and $g'$
+does not vanish, then $f$ is holomorphic on $U$ and
+\[
+  f'(z) = \frac{1}{g'\!\bigl(f(z)\bigr)}.
+\]
+\end{theorem}
+
+\begin{corollary}{Branches of $\log$ are holomorphic}{branchholo}
+A branch of $\log$ is holomorphic, with
+\[
+  \boxed{\ f'(z) = \frac{1}{e^{f(z)}} = \frac1z.\ }
+\]
+Here $g$ is the exponential function, which is holomorphic and non-vanishing.
+\end{corollary}
+
+\begin{proof}[Proof of the Theorem]
+Since $g\circ f=\mathrm{id}$ on $U$, $f$ is injective. Let $a\in U$; we show $f$ is
+differentiable at $a$, i.e. $\lim_{h\to0}\frac{f(a+h)-f(a)}{h}$ exists and equals
+$\frac{1}{g'(f(a))}$. Write
+\[
+  \frac{f(a+h)-f(a)}{h}
+  = \frac{f(a+h)-f(a)}{g\bigl(f(a+h)\bigr)-g\bigl(f(a)\bigr)}
+  = \frac{1}{\dfrac{g\bigl(f(a+h)\bigr)-g\bigl(f(a)\bigr)}{f(a+h)-f(a)}},
+\]
+using $g(f(a+h))-g(f(a)) = (a+h)-a = h$. As $h\to0$, continuity of $f$ gives
+$\alpha_h := f(a+h)-f(a)\to0$, and
+\[
+  \frac{g\bigl(f(a)+\alpha_h\bigr)-g\bigl(f(a)\bigr)}{\alpha_h} \To g'\!\bigl(f(a)\bigr)\ne0.
+\]
+Therefore
+\[
+  \lim_{h\to0}\frac{f(a+h)-f(a)}{h} = \frac{1}{g'\!\bigl(f(a)\bigr)}. \qedhere
+\]
+\end{proof}
+
+\begin{remark}
+\textbf{Summary for the logarithm.} $e^{f(z)}=z$ needs a domain avoiding $0$;
+$f(z)=\log\abs{z}+i\arg(z)$ with $\arg(z)\in(\theta,\theta+2\pi)$ or, for the principal
+branch, $\Arg(z)\in(-\pi,\pi]$; continuity of a branch $\Rightarrow$ holomorphicity, with
+$f'(z)=1/z$.
+\end{remark}
+
+\section{The power series of \texorpdfstring{$\log(1+z)$}{log(1+z)}}
+
+Since $\frac{d}{dz}\log(1+w)=\frac{1}{1+w}$, and for $\abs{w}<1$
+\[
+  \frac{1}{1+w} = 1 - w + w^2 - w^3 + w^4 - \cdots,
+\]
+we look for a formal power series whose derivative is the above; it is
+\[
+  w - \frac{w^2}{2} + \frac{w^3}{3} - \frac{w^4}{4} + \cdots, \qquad \text{radius } = 1.
+\]
+For the principal branch of $\log$,
+\[
+  \boxed{\ \log(1+z) = z - \frac{z^2}{2} + \frac{z^3}{3} - \frac{z^4}{4} + \cdots,
+  \qquad \abs{z}<1.\ }
+\]
+
+\begin{remark}
+This is a first instance of a general phenomenon proved later: \textbf{any holomorphic
+function has a power series expansion around each point of its domain}. If $f$ is
+holomorphic around $z_0$, then $f(z)=\sum_{n=0}^{\infty}a_n(z-z_0)^n$ near $z_0$.
+\end{remark}
+
+
+% ============================================================
+\chapter{Complex Integration}
+% ============================================================
+
+Complex integration is built on Riemann integration over a real interval $[a,b]$,
+transported to the plane along a path.
+
+\section{Paths}
+
+\begin{definition}{Path; smooth; piecewise smooth}{path}
+Let $U$ be an open subset of $\C$. By a \textbf{path in $U$} we mean a continuous function
+$\gamma:[a,b]\to U$ for some $a<b$ in $\R$. We call a path \textbf{smooth} if for each
+$t\in(a,b)$ the derivative $\gamma'(t)$ exists and $\gamma':(a,b)\to\C$ is continuous. We
+call it \textbf{piecewise smooth} if there is a partition
+$P=\set{ a=t_0<t_1<\cdots<t_n=b }$ such that $\gamma$ is smooth on each $[t_i,t_{i+1}]$.
+\end{definition}
+
+\begin{theorem}{Length of a path}{length}
+Let $\gamma:[a,b]\to\C$ be a piecewise smooth path (so $\gamma$ is of bounded variation).
+Then
+\[
+  \int_a^b \abs{\gamma'(t)}\,dt \quad\text{is finite.}
+\]
+This quantity is called the \textbf{length} of $\gamma$, written $L_\gamma$.
+\end{theorem}
+
+\section{The Riemann--Stieltjes integral and the path integral}
+
+\begin{theorem}{Riemann--Stieltjes integral}{rs}
+Let $\gamma:[a,b]\to\C$ be a piecewise smooth path and $f:[\,\gamma\,]\to\C$ continuous
+(on the image of $\gamma$). Then there is a complex number $I$ such that for any
+$\eps>0$ there is $\delta>0$ so that for every partition
+$a=t_0<t_1<\cdots<t_n=b$ with $\abs{t_{k+1}-t_k}<\delta$ (and any tags $\tilde t_k$),
+\[
+  \left\lvert\, I - \sum_{k=0}^{n-1} f(\tilde t_k)\,\bigl(\gamma(t_{k+1})-\gamma(t_k)\bigr)\,\right\rvert < \eps .
+\]
+The number $I$ is called the integral of $f$ with respect to $\gamma$ over $[a,b]$; in fact
+\[
+  I = \int_a^b f\bigl(\gamma(t)\bigr)\,\gamma'(t)\,dt .
+\]
+\end{theorem}
+
+\begin{definition}{Path integral}{pathint}
+Let $\gamma:[a,b]\to U$ be a piecewise smooth path and $f:U\to\C$ continuous. The
+\textbf{(path) integral of $f$ along $\gamma$} is
+\[
+  \int_\gamma f(z)\,dz \;=\; \int_a^b f\bigl(\gamma(t)\bigr)\,\gamma'(t)\,dt .
+\]
+\end{definition}
+
+\subsection{Linearity}
+
+\[
+  \int_\gamma \bigl(c f(z)+g(z)\bigr)\,dz = c\int_\gamma f(z)\,dz + \int_\gamma g(z)\,dz .
+\]
+
+\section{The fundamental example}
+
+\begin{example}{$\displaystyle\int_\gamma z^m\,dz$ around the unit circle}{zm}
+Let $\gamma:[0,1]\to\C$, $\gamma(t)=e^{2\pi i t}$ (the unit circle, positively oriented),
+and $f_m(z)=z^m$, $m\in\Z$. Then $\gamma'(t)=2\pi i\,e^{2\pi i t}$.\\[3pt]
+\textbf{Case $m=-1$.}
+\[
+  \int_\gamma \frac1z\,dz
+  = \int_0^1 \frac{1}{e^{2\pi i t}}\,\bigl(2\pi i\,e^{2\pi i t}\bigr)\,dt
+  = \int_0^1 2\pi i\,dt = 2\pi i .
+\]
+\textbf{General $m\ne-1$.}
+\[
+  \int_\gamma z^m\,dz
+  = \int_0^1 e^{2\pi i m t}\bigl(2\pi i\,e^{2\pi i t}\bigr)\,dt
+  = 2\pi i\int_0^1 e^{2\pi i (1+m) t}\,dt
+\]
+\[
+  \qquad = 2\pi i\int_0^1\Bigl[\cos 2\pi(m{+}1)t + i\sin 2\pi(m{+}1)t\Bigr]dt = 0,
+\]
+because both $\int_0^1\cos 2\pi(m{+}1)t\,dt$ and $\int_0^1\sin 2\pi(m{+}1)t\,dt$ vanish for
+$m\ne-1$. Hence
+\begin{keybox}
+\centering
+$\displaystyle \int_\gamma z^m\,dz =
+\begin{cases} 0, & m\ne -1,\\[3pt] 2\pi i, & m=-1, \end{cases}
+\qquad \gamma(t)=e^{2\pi i t},\ t\in[0,1].$
+\end{keybox}
+\end{example}
+
+\begin{remark}
+This single computation is the seed of the entire residue theory: only the $z^{-1}$ term
+contributes a nonzero integral around a loop enclosing $0$.
+\end{remark}
+
+\section{Basic properties of the path integral}
+
+\begin{definition}{Equivalent paths}{equivpaths}
+Two smooth paths $\gamma_1:[a,b]\to\C$ and $\gamma_2:[c,d]\to\C$ are called
+\textbf{equivalent} if there is a one-one $C^1$ function $\lambda:[c,d]\to[a,b]$ with
+$\lambda(c)=a$, $\lambda(d)=b$ and $\gamma_2=\gamma_1\circ\lambda$. (Intuitively, they
+trace the same curve with a different parameter --- a different speed, but the same
+direction.) We write $\gamma_1\sim\gamma_2$.
+\end{definition}
+
+\begin{theorem}{Invariance under reparametrisation}{reparam}
+If $\gamma_1\sim\gamma_2$, then $\displaystyle\int_{\gamma_1}f\,dz = \int_{\gamma_2}f\,dz$.
+\end{theorem}
+
+\begin{proof}
+Write $f=u+iv$ and $\gamma_j=\alpha_j+i\beta_j$. By definition,
+\[
+  \int_{\gamma_2}f\,dz = \int_c^d f\bigl(\gamma_2(t)\bigr)\gamma_2'(t)\,dt .
+\]
+Using $\gamma_2=\gamma_1\circ\lambda$ and $\gamma_2'(t)=\gamma_1'(\lambda(t))\lambda'(t)$,
+the substitution $s=\lambda(t)$ (so $ds=\lambda'(t)\,dt$, with $\lambda(c)=a$,
+$\lambda(d)=b$) gives
+\[
+  \int_c^d f\bigl(\gamma_1(\lambda(t))\bigr)\gamma_1'\bigl(\lambda(t)\bigr)\lambda'(t)\,dt
+  = \int_a^b f\bigl(\gamma_1(s)\bigr)\gamma_1'(s)\,ds
+  = \int_{\gamma_1}f\,dz .
+\]
+(The change of variables is applied to each of the real integrals coming from the
+expansion into $u,v,\alpha_j',\beta_j'$.)
+\end{proof}
+
+\begin{definition}{Reverse path}{reverse}
+Let $\gamma:[a,b]\to\C$ be a path. Define $\widetilde\gamma:[a,b]\to\C$ by
+$\widetilde\gamma(t)=\gamma(b+a-t)$. Then $\widetilde\gamma$ is the \textbf{reverse path}
+(it traverses the same curve from $\gamma(b)$ back to $\gamma(a)$).
+\end{definition}
+
+\begin{propos}{}{revint}
+$\displaystyle\int_{\widetilde\gamma}f(z)\,dz = -\int_{\gamma}f(z)\,dz.$
+\end{propos}
+
+\begin{proof}
+$\displaystyle\int_{\widetilde\gamma}f\,dz=\int_a^b f\bigl(\widetilde\gamma(t)\bigr)\widetilde\gamma'(t)\,dt
+=-\int_a^b f\bigl(\gamma(b+a-t)\bigr)\gamma'(b+a-t)\,dt.$ Substituting
+$\lambda(t)=b+a-t$ (so $\lambda'(t)=-1$, $\lambda(a)=b$, $\lambda(b)=a$) turns this into
+$-\int_b^a f(\gamma(s))\gamma'(s)\,ds=-\int_\gamma f\,dz$, using $\int_b^a=-\int_a^b$.
+\end{proof}
+
+\section{The ML inequality}
+
+Recall for a real interval $\bigl\lvert\int_a^b f(t)\,dt\bigr\rvert\le\int_a^b\abs{f(t)}\,dt$.
+The analogue for path integrals is the following (note one \emph{cannot} naively write
+$\int_\gamma\abs{f(z)}\,dz$, which is meaningless as a path integral; the correct bound
+uses $\int_a^b\abs{f(\gamma(t))}\abs{\gamma'(t)}\,dt$).
+
+\begin{theorem}{ML inequality}{ML}
+Let $\gamma:[a,b]\to U$ be piecewise smooth and $f:U\to\C$ continuous. Then
+\[
+  \boxed{\ \left\lvert \int_\gamma f(z)\,dz \right\rvert \;\le\; M_\gamma\, L_\gamma,\ }
+\]
+where $M_\gamma=\sup_{t\in[a,b]}\abs{f(\gamma(t))}$ and
+$L_\gamma=\int_a^b\abs{\gamma'(t)}\,dt$ is the length of $\gamma$.
+\end{theorem}
+
+\begin{proof}
+We first show the key inequality $(\star)$:
+\[
+  \left\lvert\int_\gamma f(z)\,dz\right\rvert \le \int_a^b \bigl\lvert f(\gamma(t))\,\gamma'(t)\bigr\rvert\,dt. \tag{$\star$}
+\]
+Granting $(\star)$,
+\[
+  \left\lvert\int_\gamma f\,dz\right\rvert \le \int_a^b\abs{f(\gamma(t))}\,\abs{\gamma'(t)}\,dt
+  \le M_\gamma\int_a^b\abs{\gamma'(t)}\,dt = M_\gamma L_\gamma .
+\]
+\emph{Proof of $(\star)$.} Let $g:[a,b]\to\C$ be continuous; we show
+$\bigl\lvert\int_a^b g(t)\,dt\bigr\rvert\le\int_a^b\abs{g(t)}\,dt$. Write
+$\int_a^b g(t)\,dt=R e^{i\theta}$ with $R\ge0$. Then
+\[
+  R = \left\lvert\int_a^b g(t)\,dt\right\rvert = e^{-i\theta}\int_a^b g(t)\,dt = \int_a^b e^{-i\theta}g(t)\,dt .
+\]
+Write $e^{-i\theta}g(t)=f_1(t)+i f_2(t)$ with $f_1,f_2$ real. Since $R$ is real, its
+imaginary part is $0$:
+\[
+  R = \int_a^b f_1(t)\,dt + i\int_a^b f_2(t)\,dt \ \Longrightarrow\ \int_a^b f_2(t)\,dt=0,
+\]
+so
+\[
+  R = \int_a^b f_1(t)\,dt = \int_a^b \Re\bigl(e^{-i\theta}g(t)\bigr)\,dt .
+\]
+Using $\Re(\zeta)\le\abs{\Re(\zeta)}\le\abs{\zeta}$,
+\[
+  R \le \int_a^b \bigl\lvert e^{-i\theta}g(t)\bigr\rvert\,dt = \int_a^b\abs{g(t)}\,dt .
+\]
+Applying this with $g(t)=f(\gamma(t))\gamma'(t)$ gives $(\star)$.
+\end{proof}
+
+\begin{corollary}{Uniform limits and integration}{unifint}
+Let $f_n$ be a sequence of continuous functions $U\to\C$ converging \emph{uniformly} to
+$f$. Then
+\[
+  \int_\gamma f(z)\,dz = \lim_{n\to\infty}\int_\gamma f_n(z)\,dz,
+  \qquad\text{i.e.}\qquad \int_\gamma \Bigl(\lim_{n\to\infty} f_n(z)\Bigr)dz = \lim_{n\to\infty}\int_\gamma f_n(z)\,dz .
+\]
+\end{corollary}
+
+\begin{proof}
+By the ML inequality,
+\[
+  \left\lvert\int_\gamma f_n\,dz - \int_\gamma f\,dz\right\rvert
+  = \left\lvert\int_\gamma (f_n-f)\,dz\right\rvert
+  \le \sup_{[\gamma]}\abs{f_n-f}\cdot L_\gamma .
+\]
+Given $\eps>0$, uniform convergence gives $n_0$ with $\norm{f_n-f}_\infty<\eps$ for
+$n\ge n_0$, so the difference is $<\eps L_\gamma$ for $n\ge n_0$.
+\end{proof}
+
+\section{The Fundamental Theorem of Calculus}
+
+\begin{theorem}{FTC in real analysis}{ftcreal}
+Let $f:[a,b]\to\R$ be continuous and $F(t)=\int_a^t f(x)\,dx$. Then $F$ is (uniformly)
+continuous on $[a,b]$, differentiable on $(a,b)$ with $F'=f$, and
+\[
+  \int_a^b f(x)\,dx = F(b) - F(a) .
+\]
+\end{theorem}
+
+\begin{theorem}{FTC in complex analysis}{ftccomplex}
+Let $U\subseteq\C$ be open and $\gamma:[a,b]\to U$ piecewise smooth. If $f:U\to\C$ is
+continuous and has a \textbf{primitive} $F$ (i.e. $F'=f$ on $U$), then
+\[
+  \int_\gamma f(z)\,dz = F\bigl(\gamma(b)\bigr) - F\bigl(\gamma(a)\bigr).
+\]
+\end{theorem}
+
+\begin{proof}
+Using $F'=f$ and the chain rule $\frac{d}{dt}F(\gamma(t))=F'(\gamma(t))\gamma'(t)=f(\gamma(t))\gamma'(t)$,
+\[
+  \int_\gamma f\,dz = \int_a^b f\bigl(\gamma(t)\bigr)\gamma'(t)\,dt
+  = \int_a^b \bigl(F\circ\gamma\bigr)'(t)\,dt
+  = F\bigl(\gamma(b)\bigr) - F\bigl(\gamma(a)\bigr). \qedhere
+\]
+\end{proof}
+
+\begin{caution}
+\textbf{Not every continuous function on an open subset of $\C$ has a primitive.} Consider
+$f(z)=x^2+y^2=\abs{z}^2$, continuous on $\C$.\\[3pt]
+\textbf{Claim.} There is no $F$ holomorphic on $\C$ with $F'=f$. Suppose $F=u+iv$ existed.
+By Cauchy--Riemann $u_x=v_y,\ u_y=-v_x$, and $F'=F_x=u_x+iv_x=f=x^2+y^2$. As $F'=f$ is
+real-valued, $v_x=0$, hence $u_y=-v_x=0$, so $u$ is a function of $x$ alone. But then
+$u_x=x^2+y^2$ would depend on $y$ --- a \textbf{contradiction}.
+\end{caution}
+
+\section{Closed curves}
+
+\begin{definition}{Closed and simple closed curves}{closed}
+A path $\gamma:[a,b]\to\C$ is a \textbf{closed curve} if $\gamma(a)=\gamma(b)$. It is a
+\textbf{simple closed curve} if in addition $\gamma$ is injective on $[a,b)$.
+\end{definition}
+For instance $\gamma(t)=e^{2\pi i t}$, $t\in[0,1]$, is simple closed, while
+$\gamma(t)=e^{4\pi i t}$, $t\in[0,1]$, is closed but \emph{not} simple (it wraps twice).
+
+\begin{corollary}{Primitive $\Rightarrow$ zero integral over closed curves}{closedprim}
+If, in the FTC, $\gamma$ is closed, then $\displaystyle\int_\gamma f(z)\,dz = 0$.
+\end{corollary}
+(Indeed $F(\gamma(b))-F(\gamma(a))=0$.) This is consistent with the fundamental example:
+$\int_\gamma z^m\,dz = 0$ for $m\ne-1$ because $z^m$ has the primitive
+$\frac{z^{m+1}}{m+1}$, whereas $z^{-1}$ has \emph{no} primitive on $\C\setminus\set0$,
+which is exactly why its loop integral is $2\pi i\ne0$.
+
+\section{Orientation}
+
+\begin{definition}{Positive orientation}{orient}
+A closed curve is \textbf{positively oriented} (traversed anticlockwise) if the region
+enclosed lies to the \emph{left} as we trace the curve for increasing values of $t$.
+\end{definition}
+
+
+% ============================================================
+\chapter{Cauchy's Theorem and the Integral Formula}
+% ============================================================
+
+The central discovery of the subject: the integral of a holomorphic function around a
+closed curve vanishes, and the values of a holomorphic function inside a curve are
+completely determined by its values on the curve.
+
+\section{The triangle (Goursat) theorem}
+
+\begin{theorem}{Goursat / Triangle theorem}{goursat}
+Let $U\subseteq\C$ be open and $f\in\Hol(U)$. Let $\Delta\subseteq U$ be a (solid) triangle
+contained in $U$, and let $\partial\Delta$ be its boundary, positively oriented. Then
+\[
+  \int_{\partial\Delta} f(z)\,dz = 0 .
+\]
+\end{theorem}
+
+\begin{proof}
+Write $I=\int_{\partial\Delta}f\,dz$ and let $L$ be the perimeter of $\Delta$.
+
+\emph{Subdivision.} Join the midpoints of the three sides of $\Delta$. This partitions
+$\Delta$ into four congruent sub-triangles $\Delta^{(1)},\Delta^{(2)},\Delta^{(3)},
+\Delta^{(4)}$, each with perimeter $L/2$. The interior edges are each traversed twice in
+opposite directions, so their contributions cancel and
+\[
+  I = \int_{\partial\Delta}f\,dz = \sum_{j=1}^{4}\int_{\partial\Delta^{(j)}}f\,dz .
+\]
+Hence for at least one $j$,
+$\bigl\lvert\int_{\partial\Delta^{(j)}}f\,dz\bigr\rvert\ge\frac{\abs I}{4}$. Call that
+sub-triangle $\Delta_1$; then
+\[
+  \left\lvert\int_{\partial\Delta_1}f\,dz\right\rvert \ge \frac{\abs I}{4},
+  \qquad \operatorname{perim}(\Delta_1)=\frac{L}{2},
+  \qquad \operatorname{diam}(\Delta_1)=\frac{\operatorname{diam}\Delta}{2}.
+\]
+
+\emph{Iteration and nesting.} Repeat, producing nested triangles
+$\Delta\supseteq\Delta_1\supseteq\Delta_2\supseteq\cdots$ with
+\[
+  \left\lvert\int_{\partial\Delta_n}f\,dz\right\rvert \ge \frac{\abs I}{4^n},
+  \qquad \operatorname{perim}(\Delta_n)=\frac{L}{2^n},
+  \qquad \operatorname{diam}(\Delta_n)=\frac{d}{2^n}\ (d=\operatorname{diam}\Delta).
+\]
+The $\Delta_n$ are nonempty, compact and nested with $\operatorname{diam}\Delta_n\to0$; by
+\textbf{Cantor's intersection theorem} there is a unique point
+$z_0\in\bigcap_{n\ge1}\Delta_n\subseteq U$.
+
+\emph{Using differentiability at $z_0$.} Since $f$ is differentiable at $z_0$, given
+$\eps>0$ there is $\delta>0$ with
+\[
+  \bigl\lvert f(z)-f(z_0)-f'(z_0)(z-z_0)\bigr\rvert \le \eps\,\abs{z-z_0}
+  \qquad\text{for } \abs{z-z_0}<\delta .
+\]
+Choose $n$ large enough that $\Delta_n\subseteq B(z_0,\delta)$. The functions
+$z\mapsto f(z_0)$ and $z\mapsto f'(z_0)(z-z_0)$ are polynomials, hence have primitives, so
+their integrals over the closed curve $\partial\Delta_n$ vanish:
+\[
+  \int_{\partial\Delta_n}\bigl[f(z_0)+f'(z_0)(z-z_0)\bigr]\,dz = 0 .
+\]
+Therefore
+\[
+  \int_{\partial\Delta_n}f\,dz
+  = \int_{\partial\Delta_n}\bigl[f(z)-f(z_0)-f'(z_0)(z-z_0)\bigr]\,dz .
+\]
+By the ML inequality, with $M_n=\sup_{z\in\partial\Delta_n}\abs{z-z_0}\le\operatorname{diam}\Delta_n=d/2^n$
+and length $L/2^n$,
+\[
+  \left\lvert\int_{\partial\Delta_n}f\,dz\right\rvert
+  \le \eps\cdot\frac{d}{2^n}\cdot\frac{L}{2^n} = \frac{\eps\,dL}{4^n}.
+\]
+Combining with the lower bound $\frac{\abs I}{4^n}\le\bigl\lvert\int_{\partial\Delta_n}f\,dz\bigr\rvert$,
+\[
+  \frac{\abs I}{4^n} \le \frac{\eps\,dL}{4^n}
+  \;\Longrightarrow\; \abs I \le \eps\,dL .
+\]
+As $\eps>0$ is arbitrary, $\abs I=0$, i.e. $I=0$.
+\end{proof}
+
+\section{From the triangle theorem to primitives}
+
+\begin{theorem}{Integral / Primitive theorem}{primitive}
+Let $f$ be holomorphic on a \emph{convex} open set $U$ (or a disc). Then $f$ has a
+primitive $F$ on $U$; consequently $\int_\gamma f\,dz=0$ for every closed path $\gamma$ in
+$U$.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Fix a base point $z_*\in U$ and define $F(z)=\int_{[z_*,z]}f(\zeta)\,d\zeta$ along the
+straight segment (which lies in $U$ by convexity). For $z,z+h\in U$, the triangle with
+vertices $z_*,z,z+h$ lies in $U$, so by Goursat the integral around it is $0$; this gives
+\[
+  F(z+h)-F(z) = \int_{[z,z+h]}f(\zeta)\,d\zeta .
+\]
+Dividing by $h$ and using continuity of $f$, $\frac{F(z+h)-F(z)}{h}\to f(z)$, so $F'=f$.
+By the FTC (complex form), $\int_\gamma f\,dz=0$ for every closed $\gamma$.
+\end{proof}
+
+\begin{theorem}{Closed-curve theorem}{closedcurve}
+Let $f$ be holomorphic on a disc $D$ (more generally a convex/star-shaped domain). Then for
+every closed path $\gamma$ in $D$,
+\[
+  \int_\gamma f(z)\,dz = 0 .
+\]
+\end{theorem}
+
+\section{The Cauchy Integral Formula}
+
+\begin{theorem}{Cauchy Integral Formula}{cif}
+Let $f$ be holomorphic on an open set containing the closed disc $\overline{B(a,r)}$, and
+let $\gamma$ be the boundary circle $a+\gamma_r$ positively oriented. Then for every
+$\alpha$ with $\abs{\alpha-a}<r$,
+\[
+  \boxed{\ f(\alpha) = \frac{1}{2\pi i}\int_{a+\gamma_r}\frac{f(z)}{z-\alpha}\,dz.\ }
+\]
+\end{theorem}
+
+\begin{proof}
+Define
+\[
+  g(z) =
+  \begin{cases}
+    \dfrac{f(z)-f(\alpha)}{z-\alpha}, & z\ne\alpha,\\[8pt]
+    f'(\alpha), & z=\alpha.
+  \end{cases}
+\]
+Then $g$ is holomorphic on the disc except possibly at $\alpha$, and is continuous at
+$\alpha$; in fact $g$ is holomorphic on the whole disc (the singularity is removable, as
+justified later, or one applies the closed-curve theorem to the extended $g$). Hence by the
+closed-curve theorem $\int_{a+\gamma_r} g(z)\,dz=0$, i.e.
+\[
+  \int_{a+\gamma_r}\frac{f(z)-f(\alpha)}{z-\alpha}\,dz = 0
+  \;\Longrightarrow\;
+  \int_{a+\gamma_r}\frac{f(z)}{z-\alpha}\,dz
+  = f(\alpha)\int_{a+\gamma_r}\frac{dz}{z-\alpha}.
+\]
+It remains to evaluate $\int_{a+\gamma_r}\frac{dz}{z-\alpha}$. Parametrising the circle and
+using the fundamental example (only the $(z-\alpha)^{-1}$ power contributes),
+\[
+  \int_{a+\gamma_r}\frac{dz}{z-\alpha} = 2\pi i .
+\]
+Therefore $\int_{a+\gamma_r}\frac{f(z)}{z-\alpha}\,dz = 2\pi i\, f(\alpha)$, which is the
+claim.
+\end{proof}
+
+\section{Power series expansion of holomorphic functions}
+
+\begin{corollary}{Power series expansion}{cifps}
+Let $f$ be holomorphic on $B(a,R)$. Then $f$ has a power series expansion
+\[
+  f(z) = \sum_{n\ge0} a_n\,(z-a)^n \qquad \text{for } \abs{z-a}<R,
+\]
+where the coefficients are
+\[
+  a_n = \frac{1}{2\pi i}\int_{a+\gamma_r}\frac{f(z)}{(z-a)^{n+1}}\,dz
+      = \frac{f^{(n)}(a)}{n!}, \qquad 0<r<R .
+\]
+In particular $f$ is infinitely differentiable and
+\[
+  \boxed{\ f^{(n)}(a) = \frac{n!}{2\pi i}\int_{a+\gamma_r}\frac{f(z)}{(z-a)^{n+1}}\,dz.\ }
+\]
+\end{corollary}
+
+\begin{proof}[Sketch]
+In the Cauchy Integral Formula expand the kernel as a geometric series: for $z$ on the
+circle of radius $r$ and $\abs{\alpha-a}<r$,
+\[
+  \frac{1}{z-\alpha}
+  = \frac{1}{(z-a)-(\alpha-a)}
+  = \frac{1}{z-a}\cdot\frac{1}{1-\frac{\alpha-a}{z-a}}
+  = \sum_{n\ge0}\frac{(\alpha-a)^n}{(z-a)^{n+1}},
+\]
+which converges uniformly in $z$ on the circle (since
+$\bigl\lvert\frac{\alpha-a}{z-a}\bigr\rvert=\frac{\abs{\alpha-a}}{r}<1$). Interchanging sum
+and integral (Corollary on uniform limits and integration),
+\[
+  f(\alpha) = \frac{1}{2\pi i}\int\frac{f(z)}{z-\alpha}\,dz
+  = \sum_{n\ge0}\Bigl(\frac{1}{2\pi i}\int\frac{f(z)}{(z-a)^{n+1}}\,dz\Bigr)(\alpha-a)^n
+  = \sum_{n\ge0}a_n(\alpha-a)^n .
+\]
+Comparison with term-by-term differentiation gives $a_n=f^{(n)}(a)/n!$.
+\end{proof}
+
+\section{Analytic \texorpdfstring{$=$}{=} holomorphic}
+
+\begin{definition}{Analytic function}{analytic}
+A function $f:U\to\C$ is \textbf{analytic} at $a\in U$ if there is $r>0$ and a power series
+$\sum_{n\ge0}a_n(z-a)^n$ with $f(z)=\sum_{n\ge0}a_n(z-a)^n$ for all $z\in B(a,r)$. It is
+analytic on $U$ if analytic at every point of $U$.
+\end{definition}
+
+\begin{theorem}{Holomorphic $\Longleftrightarrow$ analytic}{holoanalytic}
+For $f:U\to\C$ on an open set $U$,
+\[
+  f \text{ is holomorphic on } U \quad\Longleftrightarrow\quad f \text{ is analytic on } U .
+\]
+\end{theorem}
+
+\begin{proof}
+$(\Leftarrow)$ A convergent power series is holomorphic inside its disc of convergence
+(term-by-term differentiation). $(\Rightarrow)$ is exactly the power series expansion
+corollary above.
+\end{proof}
+
+\begin{caution}
+\textbf{This equivalence is special to the complex setting.} In real analysis a function
+can be $C^\infty$ (infinitely differentiable) yet \emph{not} analytic. The standard
+example is
+\[
+  g(x) =
+  \begin{cases}
+    e^{-1/x}, & x>0,\\
+    0, & x\le0.
+  \end{cases}
+\]
+Here $g$ is $C^\infty$ on $\R$ with $g^{(n)}(0)=0$ for all $n$, so its Taylor series at $0$
+is identically $0$, which does not equal $g$ in any neighbourhood of $0$. Thus $g$ is
+$C^\infty$ but not analytic. \emph{No such pathology occurs for holomorphic functions.}
+\end{caution}
+
+\section{Morera's theorem}
+
+\begin{theorem}{Morera's theorem}{morera}
+Let $U\subseteq\C$ be open and $f:U\to\C$ continuous. If
+\[
+  \int_{\partial\Delta} f(z)\,dz = 0
+\]
+for every triangle $\Delta\subseteq U$, then $f$ is holomorphic on $U$.
+\end{theorem}
+
+\begin{proof}
+Holomorphicity is local, so work in a disc $B\subseteq U$. As in the primitive theorem,
+fix a base point and define $F(z)=\int_{[z_*,z]}f(\zeta)\,d\zeta$. The hypothesis (vanishing
+of $f$ over triangle boundaries) gives, for $z,z+h\in B$,
+\[
+  F(z+h)-F(z) = \int_{[z,z+h]} f(\zeta)\,d\zeta,
+\]
+and by continuity of $f$, $\frac{F(z+h)-F(z)}{h}\to f(z)$, so $F'=f$ on $B$. Thus $F$ is
+holomorphic on $B$; being holomorphic, $F$ is infinitely differentiable, hence
+$f=F'$ is holomorphic on $B$. As $B$ was arbitrary, $f\in\Hol(U)$.
+\end{proof}
+
+
+% ============================================================
+\chapter{Consequences of the Cauchy Theory}
+% ============================================================
+
+\section{Uniform limits and the Cauchy estimates}
+
+\begin{theorem}{Uniform limit of holomorphic functions is holomorphic}{unifholo}
+Let $f_n\in\Hol(U)$ converge uniformly on compact subsets of $U$ to $f$. Then
+$f\in\Hol(U)$, and moreover $f_n'\to f'$ uniformly on compact subsets.
+\end{theorem}
+
+\begin{proof}
+$f$ is continuous (uniform limit of continuous functions). For any triangle
+$\Delta\subseteq U$, by Goursat $\int_{\partial\Delta}f_n\,dz=0$; letting $n\to\infty$ and
+using uniform convergence (ML inequality) gives $\int_{\partial\Delta}f\,dz=0$. By Morera's
+theorem $f\in\Hol(U)$.
+\end{proof}
+
+\begin{theorem}{Cauchy estimates}{cauchyest}
+Let $f$ be holomorphic on an open set containing $\overline{B(a,r)}$, and let
+$M=\sup_{\abs{z-a}=r}\abs{f(z)}$. Then for every $k\ge0$,
+\[
+  \boxed{\ \bigl\lvert f^{(k)}(a)\bigr\rvert \le \frac{k!\,M}{r^{k}}.\ }
+\]
+\end{theorem}
+
+\begin{proof}
+From the integral formula for derivatives,
+\[
+  f^{(k)}(a) = \frac{k!}{2\pi i}\int_{a+\gamma_r}\frac{f(z)}{(z-a)^{k+1}}\,dz .
+\]
+On the circle $\abs{z-a}=r$ the integrand has modulus $\le M/r^{k+1}$, and the length is
+$2\pi r$; by the ML inequality,
+\[
+  \bigl\lvert f^{(k)}(a)\bigr\rvert \le \frac{k!}{2\pi}\cdot\frac{M}{r^{k+1}}\cdot 2\pi r
+  = \frac{k!\,M}{r^{k}}. \qedhere
+\]
+\end{proof}
+
+\section{Liouville's theorem}
+
+\begin{theorem}{Liouville}{liouville}
+A bounded entire function is constant.
+\end{theorem}
+
+\begin{proof}
+Let $f$ be entire with $\abs{f}\le M$ on $\C$. For any $a\in\C$ and any $r>0$, the Cauchy
+estimate with $k=1$ gives
+\[
+  \abs{f'(a)} \le \frac{1!\,M}{r} = \frac{M}{r}.
+\]
+Letting $r\to\infty$, $\abs{f'(a)}=0$. So $f'\equiv0$ on $\C$, and since $\C$ is a domain,
+$f$ is constant.
+\end{proof}
+
+\begin{corollary}{$\cos,\sin$ are unbounded on $\C$}{trigunbounded}
+$\cos$ and $\sin$ are entire and non-constant; if either were bounded on $\C$, Liouville
+would force it to be constant. Hence both are \emph{unbounded} on $\C$ --- in sharp
+contrast to the real case, where $\abs{\cos x},\abs{\sin x}\le1$.
+\end{corollary}
+
+\begin{theorem}{Generalised Liouville}{genliouville}
+Let $f$ be entire and suppose there exist constants $A,B\ge0$ and an integer $n\ge0$ with
+\[
+  \abs{f(z)} \le A + B\,\abs{z}^{n} \qquad \text{for all } z\in\C .
+\]
+Then $f$ is a polynomial of degree $\le n$.
+\end{theorem}
+
+\begin{proof}
+Expand $f(z)=\sum_{k\ge0}a_k z^k$ (valid on all of $\C$). For $k>n$ and any $r>0$, the
+Cauchy estimate gives
+\[
+  \abs{a_k} = \frac{\bigl\lvert f^{(k)}(0)\bigr\rvert}{k!}
+  \le \frac{M(r)}{r^{k}}, \qquad M(r)=\sup_{\abs z=r}\abs{f}\le A+B r^{n}.
+\]
+Thus $\abs{a_k}\le\dfrac{A+Br^{n}}{r^{k}}\to0$ as $r\to\infty$ (since $k>n$). Hence
+$a_k=0$ for all $k>n$, so $f$ is a polynomial of degree $\le n$.
+\end{proof}
+
+\section{The Fundamental Theorem of Algebra}
+
+\begin{theorem}{Fundamental Theorem of Algebra}{fta}
+Every non-constant polynomial $P(z)=a_n z^n+\cdots+a_1 z+a_0$ with complex coefficients
+($a_n\ne0$, $n\ge1$) has a root in $\C$.
+\end{theorem}
+
+\begin{proof}
+Suppose, for contradiction, $P(z)\ne0$ for all $z\in\C$. Then $g(z)=\dfrac{1}{P(z)}$ is
+entire. We show $g$ is bounded. As $\abs z\to\infty$,
+\[
+  \abs{P(z)} = \abs{z}^n\,\Bigl\lvert a_n + \frac{a_{n-1}}{z}+\cdots+\frac{a_0}{z^n}\Bigr\rvert
+  \To \infty,
+\]
+so $\abs{g(z)}=1/\abs{P(z)}\to0$; in particular there is $R>0$ with $\abs{g(z)}\le1$ for
+$\abs z\ge R$. On the compact disc $\abs z\le R$, $g$ is continuous, hence bounded. So $g$
+is bounded on all of $\C$. By Liouville $g$ is constant, hence $P$ is constant ---
+contradicting $n\ge1$. Therefore $P$ has a root.
+\end{proof}
+
+\begin{theorem}{Entire functions blowing up at infinity are polynomials}{entireinfty}
+If $f$ is entire and $\abs{f(z)}\to\infty$ as $\abs z\to\infty$, then $f$ is a polynomial.
+\end{theorem}
+
+\begin{proof}[Idea]
+The hypothesis shows $f$ has finitely many zeros, and controls the growth so that the
+generalised Liouville argument applies to $f$ divided by a polynomial vanishing at those
+zeros; one concludes $f$ is a polynomial.
+\end{proof}
+
+\section{Zeros of holomorphic functions}
+
+\begin{lemma}{Zeros are isolated (finiteness on compacts)}{zerosisolated}
+Let $f\in\Hol(D)$, $f\not\equiv0$, on a domain $D$. Then the zeros of $f$ have no
+accumulation point in $D$; consequently $f$ has only finitely many zeros in any compact
+subset of $D$.
+\end{lemma}
+
+\begin{proof}[Sketch]
+If $f(a)=0$ and $f\not\equiv0$ near $a$, expand $f(z)=\sum_{n\ge m}a_n(z-a)^n$ with
+$a_m\ne0$ (the first nonzero coefficient). Then $f(z)=(z-a)^m h(z)$ with $h(a)=a_m\ne0$ and
+$h$ holomorphic, so $h\ne0$ in a neighbourhood of $a$; hence $a$ is an isolated zero. A
+compact set covered by such neighbourhoods contains only finitely many zeros.
+\end{proof}
+
+\begin{definition}{Order / multiplicity of a zero}{multiplicity}
+If $f(z)=(z-a)^m h(z)$ near $a$ with $h(a)\ne0$ and $m\ge1$, we say $a$ is a zero of $f$ of
+\textbf{order} (or \textbf{multiplicity}) $m$. Equivalently
+$f(a)=f'(a)=\cdots=f^{(m-1)}(a)=0$ but $f^{(m)}(a)\ne0$.
+\end{definition}
+
+\section{The Identity theorem}
+
+\begin{theorem}{Identity (Uniqueness) theorem}{identity}
+Let $D$ be a domain and $f_1,f_2\in\Hol(D)$. Suppose $f_1=f_2$ on a set $S\subseteq D$ that
+has an accumulation point in $D$. Then $f_1=f_2$ on all of $D$.
+\end{theorem}
+
+\begin{proof}
+Let $g=f_1-f_2\in\Hol(D)$; then $g=0$ on $S$, and we must show $g\equiv0$ on $D$. Let
+\[
+  A = \set{ z\in D : g^{(n)}(z)=0 \ \text{for all } n\ge0 }, \qquad
+  B = \set{ z\in D : g^{(n)}(z)\ne0 \ \text{for some } n\ge0 }.
+\]
+Clearly $D=A\sqcup B$.
+
+\emph{$B$ is open.} If $z\in B$ then some $g^{(n)}(z)\ne0$; by continuity $g^{(n)}\ne0$ in a
+neighbourhood, so that neighbourhood is in $B$.
+
+\emph{$A$ is open.} If $z_0\in A$ then all derivatives vanish at $z_0$, so the power series
+of $g$ around $z_0$ is identically $0$; hence $g\equiv0$ on a disc $B(z_0,r)\subseteq D$,
+and on that disc all derivatives of $g$ vanish, so $B(z_0,r)\subseteq A$.
+
+\emph{$A$ is nonempty.} The accumulation point $a\in D$ of $S$ lies in the zero set of $g$;
+since zeros of a not-identically-zero holomorphic function are isolated, $g$ cannot have
+$a$ as an accumulation point of zeros \emph{unless} $g\equiv0$ near $a$. Hence $g$ vanishes
+to infinite order at $a$, i.e. $a\in A$.
+
+Now $D=A\sqcup B$ is a partition into two open sets with $A\ne\emptyset$. As $D$ is
+connected, $B=\emptyset$ and $A=D$. Therefore $g\equiv0$ on $D$, i.e. $f_1=f_2$.
+\end{proof}
+
+\begin{corollary}{$\Hol(D)$ is an integral domain}{intdomain}
+Let $D$ be a domain and $f,g\in\Hol(D)$ with $f\cdot g\equiv0$. Then $f\equiv0$ or
+$g\equiv0$.
+\end{corollary}
+
+\begin{proof}
+Suppose $g\not\equiv0$. Then the zeros of $g$ are isolated, so $D\setminus g^{-1}(0)$ is a
+dense open subset of $D$ on which $f=0$ (because $fg\equiv0$). This zero set of $f$ has
+accumulation points throughout $D$; by the Identity theorem $f\equiv0$.
+\end{proof}
+
+\section{The Maximum-Modulus Principle}
+
+The proof rests on the \textbf{mean value property}: from the Cauchy Integral Formula with
+$z=a+re^{i\theta}$,
+\[
+  f(a) = \frac{1}{2\pi}\int_0^{2\pi} f\bigl(a+re^{i\theta}\bigr)\,d\theta .
+\]
+
+\begin{theorem}{Maximum-Modulus Principle}{maxmod}
+Let $D$ be a domain and $f\in\Hol(D)$.
+\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2em]
+  \item \textbf{(Statement 1)} If $\abs{f}$ attains a local maximum at some point $a\in D$,
+        then $f$ is constant on $D$.
+  \item \textbf{(Statement 2)} If $D$ is bounded and $f$ extends continuously to
+        $\overline D$, then $\abs f$ attains its maximum on the boundary $\partial D$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{(1)} Suppose $\abs{f(a)}\ge\abs{f(z)}$ for $z$ near $a$. By the mean value property,
+for small $r$,
+\[
+  \abs{f(a)} = \left\lvert \frac{1}{2\pi}\int_0^{2\pi} f(a+re^{i\theta})\,d\theta\right\rvert
+  \le \frac{1}{2\pi}\int_0^{2\pi}\abs{f(a+re^{i\theta})}\,d\theta \le \abs{f(a)}.
+\]
+Equality throughout forces $\abs{f(a+re^{i\theta})}=\abs{f(a)}$ for all $\theta$ and all
+small $r$; hence $\abs f$ is constant on a neighbourhood of $a$. A holomorphic function of
+constant modulus on a domain is constant, so $f$ is constant near $a$, and by the Identity
+theorem $f$ is constant on $D$.
+
+\textbf{(2)} $\abs f$ is continuous on the compact set $\overline D$, so it attains a
+maximum at some $p\in\overline D$. If $p\in\partial D$ we are done. If $p\in D$, then by
+(1) $f$ is constant on $D$, hence (by continuity) on $\overline D$, and the maximum is also
+attained on $\partial D$.
+\end{proof}
+
+\begin{corollary}{Maximum on the boundary}{maxbdry}
+For $f$ holomorphic on a bounded domain $D$ and continuous on $\overline D$,
+\[
+  \max_{z\in\overline D}\abs{f(z)} = \max_{z\in\partial D}\abs{f(z)}.
+\]
+\end{corollary}
+
+\begin{theorem}{Minimum-Modulus Principle}{minmod}
+Let $D$ be a domain and $f\in\Hol(D)$ with $f(z)\ne0$ for all $z\in D$. If $\abs f$ attains
+a local minimum in $D$, then $f$ is constant. (Apply the maximum principle to $1/f$, which
+is holomorphic since $f$ is non-vanishing.)
+\end{theorem}
+
+\begin{remark}
+A \textbf{connected component} of an open set $U$ is a maximal connected subset; open
+subsets of $\C$ decompose into countably many open connected components, and the theorems
+above are applied component by component.
+\end{remark}
+
+\section{The Open Mapping theorem}
+
+\begin{theorem}{Open Mapping theorem}{openmap}
+Let $D$ be a domain and $f\in\Hol(D)$ be non-constant. Then $f$ is an \textbf{open map}:
+for every open $V\subseteq D$, the image $f(V)$ is open in $\C$.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Fix $a\in D$ and let $w_0=f(a)$. Since $f$ is non-constant, $f(z)-w_0$ has a zero of some
+finite order $m\ge1$ at $a$, and (as zeros are isolated) there is a small circle
+$\abs{z-a}=r$ on which $\abs{f(z)-w_0}\ge\delta>0$. For any $w$ with $\abs{w-w_0}<\delta$,
+Rouché-type reasoning (or the argument principle) shows $f(z)-w$ has the same number $m$ of
+zeros inside the circle; in particular $f$ takes the value $w$. Hence $B(w_0,\delta)\subseteq
+f(V)$, so $f(V)$ is open.
+\end{proof}
+
+\section{The Inverse Function theorem}
+
+\begin{theorem}{Inverse Function theorem (real form)}{iftreal}
+Let $F:U(\subseteq\R^n)\to\R^n$ be $C^1$ and suppose the Jacobian $DF(a)$ is invertible at
+$a$. Then $F$ is a local diffeomorphism near $a$: there are neighbourhoods of $a$ and
+$F(a)$ on which $F$ is a bijection with $C^1$ inverse.
+\end{theorem}
+
+\begin{theorem}{Inverse Function theorem (holomorphic form)}{iftholo}
+Let $f\in\Hol(U)$ and suppose $f'(a)\ne0$. Then there is a neighbourhood $V$ of $a$ such
+that $f|_V$ is injective, $f(V)$ is open, and the inverse $f^{-1}:f(V)\to V$ is holomorphic
+with
+\[
+  \bigl(f^{-1}\bigr)'(w) = \frac{1}{f'\!\bigl(f^{-1}(w)\bigr)}.
+\]
+\end{theorem}
+
+\begin{proof}[Sketch]
+$f'(a)\ne0$ means the real Jacobian (which is the multiplication matrix of $f'(a)$, with
+determinant $\abs{f'(a)}^2$) is invertible; the real inverse function theorem gives a local
+$C^1$ inverse $g$. The formula $g'(w)=1/f'(g(w))$ from the holomorphic-inverse theorem shows
+$g$ is holomorphic.
+\end{proof}
+
+\subsection{Non-vanishing of the derivative}
+
+\begin{theorem}{Local $k$-th root and injectivity}{nonvanish}
+Let $f\in\Hol(U)$ and $a\in U$ with $f'(a)\ne0$. Then near $a$ one can write, after a
+holomorphic change of coordinates, $f(z)-f(a)=\bigl(h(z)\bigr)^{1}$ with $h$ holomorphic and
+$h'(a)\ne0$; more generally, if $f(z)-f(a)$ vanishes to order $k$ at $a$ then
+$f(z)-f(a)=\bigl(h(z)\bigr)^{k}$ locally, where
+\[
+  h(z) = \exp\!\Big(\frac1k\,\log g(z)\Big), \qquad f(z)-f(a) = (z-a)^k g(z),\ g(a)\ne0,
+\]
+choosing a branch of $\log$ near $g(a)\ne0$. Consequently $f$ is locally $k$-to-one, and
+$1$-to-one exactly when $f'(a)\ne0$ (i.e. $k=1$).
+\end{theorem}
+
+\begin{proof}[Sketch]
+Write $f(z)-f(a)=(z-a)^k g(z)$ with $g(a)\ne0$, $g$ holomorphic. Since $g(a)\ne0$, a branch
+of $\log g$ exists near $a$; set $h(z)=(z-a)\exp\bigl(\tfrac1k\log g(z)\bigr)$. Then
+$h(z)^k=(z-a)^k g(z)=f(z)-f(a)$ and $h'(a)\ne0$, so $h$ is a local biholomorphism and $f$
+behaves like $w\mapsto w^k$ in the $h$-coordinate --- $k$-to-one for $k\ge2$, injective for
+$k=1$.
+\end{proof}
+
+
+% ============================================================
+\chapter{Isolated Singularities}
+% ============================================================
+
+\section{Isolated singularities}
+
+\begin{definition}{Isolated singularity}{isolated}
+Let $f$ be holomorphic on a deleted neighbourhood $B(\alpha,\delta)\setminus\set{\alpha}$
+of a point $\alpha$ (but not necessarily at $\alpha$ itself). Then $\alpha$ is called an
+\textbf{isolated singularity} of $f$.
+\end{definition}
+
+\begin{example}{Isolated vs non-isolated singularities}{isolexamples}
+\textbf{(a)} $f(z)=\dfrac1z$ has an isolated singularity at $0$.\\[3pt]
+\textbf{(b)} A branch of $\log z$ is not holomorphic on any deleted neighbourhood of $0$
+(the whole slit ray is singular), so $0$ is \emph{not} an isolated singularity of $\log$.
+\\[3pt]
+\textbf{(c)} $\tan\!\big(\tfrac1z\big)$ has singularities at the points where
+$\tfrac1z=\tfrac\pi2+n\pi$, i.e. $z=\dfrac{1}{\frac\pi2+n\pi}$; these accumulate at $0$, so
+$0$ is a \emph{non-isolated} singularity, while each nonzero such $z$ is isolated.
+\end{example}
+
+\begin{definition}{The three types}{sing3}
+An isolated singularity $\alpha$ of $f$ is called:
+\begin{enumerate}[label=\textup{(\arabic*)},leftmargin=2em]
+  \item a \textbf{removable singularity} if $f$ can be extended holomorphically across
+        $\alpha$ (there is a holomorphic $g$ on $B(\alpha,\delta)$ with $g=f$ on the
+        deleted neighbourhood);
+  \item a \textbf{polar singularity} (a \textbf{pole}) if on a deleted neighbourhood
+        $B(\alpha,\delta)\setminus\set{\alpha}$ we can write
+        \[
+          f(z) = \frac{g(z)}{h(z)}, \qquad g(\alpha)\ne0,\ h(\alpha)=0,\ g,h\in\Hol(B(\alpha,\delta));
+        \]
+        (e.g. $f(z)=1/z$ --- the limit would not exist);
+  \item an \textbf{essential singularity} if $\alpha$ is neither a removable nor a polar
+        singularity (e.g. $\exp(1/z)$ at $z=0$).
+\end{enumerate}
+\end{definition}
+
+\section{Characterisation of removable singularities}
+
+\begin{theorem}{Removable singularity}{remsing}
+Let $\alpha$ be an isolated singularity of $f$. The following are equivalent:
+\[
+  \alpha \text{ is removable} \ \Longleftrightarrow\ \lim_{z\to\alpha} f(z) \text{ exists}
+  \ \Longleftrightarrow\ \lim_{z\to\alpha}(z-\alpha)f(z) = 0 .
+\]
+\end{theorem}
+
+\begin{proof}
+$(\Rightarrow)$ is immediate: if $f$ extends holomorphically then $\lim_{z\to\alpha}f(z)$
+exists (equal to the extended value) and $\lim(z-\alpha)f(z)=0$.
+
+$(\Leftarrow)$ Suppose $\lim_{z\to\alpha}(z-\alpha)f(z)=0$. Define
+\[
+  h(z) =
+  \begin{cases}
+    (z-\alpha)\,f(z), & z\ne\alpha,\\
+    0, & z=\alpha,
+  \end{cases}
+\]
+which is continuous at $\alpha$ (by hypothesis) and holomorphic on the deleted
+neighbourhood, hence holomorphic on $B(\alpha,\delta)$. Now define
+\[
+  g(z) =
+  \begin{cases}
+    \dfrac{h(z)-h(\alpha)}{z-\alpha}, & z\ne\alpha,\\[8pt]
+    h'(\alpha), & z=\alpha,
+  \end{cases}
+\]
+which is again holomorphic around $\alpha$. For $z\ne\alpha$,
+\[
+  g(z) = \frac{h(z)-0}{z-\alpha} = \frac{(z-\alpha)f(z)}{z-\alpha} = f(z),
+\]
+so $g$ is the required holomorphic extension of $f$; thus $\alpha$ is a removable
+singularity.
+\end{proof}
+
+\section{Characterisation of poles}
+
+\begin{theorem}{Pole}{polesing}
+Let $\alpha$ be an isolated singularity of $f$. Then
+\[
+  \alpha \text{ is a pole} \ \Longleftrightarrow\ \lim_{z\to\alpha}\abs{f(z)} = \infty .
+\]
+Moreover, near a pole one can write $f(z)=\dfrac{g(z)}{(z-\alpha)^{m}}$ with $g$ holomorphic
+and $g(\alpha)\ne0$; the integer $m\ge1$ is the \textbf{order} of the pole.
+\end{theorem}
+
+\begin{proof}
+$(\Rightarrow)$ Immediate: if $f=g/h$ with $g(\alpha)\ne0$, $h(\alpha)=0$, then
+$\abs{f(z)}\to\infty$.
+
+$(\Leftarrow)$ Suppose $\lim_{z\to\alpha}\abs{f(z)}=\infty$. Then there is $\delta>0$ with
+$\abs{f(z)}>1$ (indeed $>10^{2026}$, say) on $B(\alpha,\delta)\setminus\set\alpha$. Define
+\[
+  h(z) = \frac{1}{f(z)}, \qquad z\in B(\alpha,\delta)\setminus\set\alpha,
+\]
+which is holomorphic there, and $\lim_{z\to\alpha}h(z)=0$. So $h$ has a removable
+singularity at $\alpha$ and extends with $h(\alpha)=0$. Write its power series
+\[
+  h(z) = \sum_{n\ge m} a_n (z-\alpha)^n, \qquad a_m\ne0,\ a_i=0\ (0\le i<m),
+\]
+so $h(z) = (z-\alpha)^m\underbrace{\sum_{n\ge m} a_n (z-\alpha)^{n-m}}_{=:h_1(z)}$, with
+$h_1$ holomorphic on $B(\alpha,\delta)$ and $h_1(\alpha)=a_m\ne0$. Hence there is
+$\delta'>0$ with $h_1\ne0$ on $B(\alpha,\delta')$, so $1/h_1$ is holomorphic there. Then on
+$B(\alpha,\delta')\setminus\set\alpha$,
+\[
+  f(z) = \frac{1}{h(z)} = \frac{1}{(z-\alpha)^m h_1(z)}
+  = \frac{1/h_1(z)}{(z-\alpha)^m},
+\]
+i.e. $f(z)=\dfrac{g(z)}{(z-\alpha)^m}$ with $g=1/h_1$ holomorphic and $g(\alpha)\ne0$. Thus
+$\alpha$ is a pole of order $m$.
+\end{proof}
+
+\begin{remark}
+The proof shows: if $\alpha$ is a pole of $f$, then around $\alpha$ we may write
+$f(z)=\dfrac{g(z)}{(z-\alpha)^m}$ for some $m>0$ with $g(\alpha)\ne0$ and $g$ holomorphic at
+$\alpha$. We say $\alpha$ is a pole of \textbf{``order $m$''}. Also:
+$\alpha$ is a pole of order $k$ $\Longleftrightarrow$ $(z-\alpha)^k f(z)$ has a removable
+singularity at $\alpha$.
+\end{remark}
+
+\section{Characterisation of essential singularities}
+
+\begin{theorem}{Essential singularity}{esssing}
+Let $\alpha$ be an isolated singularity of $f$. Then $\alpha$ is an essential singularity
+if and only if there exist two sequences $a_n\to\alpha$ (with $a_n\ne\alpha$) and
+$b_n\to\alpha$ (with $b_n\ne\alpha$) such that
+\[
+  f(a_n) \text{ is bounded}, \qquad \abs{f(b_n)}\to\infty \quad(n\to\infty).
+\]
+Equivalently, there are sequences $a_n,b_n\to\alpha$ with $f(a_n)\to c$ and $f(b_n)\to d$
+for some $c\ne d$.
+\end{theorem}
+
+\begin{example}{$\exp(1/z)$ has an essential singularity at $0$}{expess}
+Take $z_n=\dfrac1n\to0$: then $\exp(1/z_n)=e^{n}\to\infty$. Take $z_n=\dfrac{i}{n}\to0$:
+then $\exp(1/z_n)=e^{-in}$, which stays bounded (modulus $1$). The two behaviours differ,
+so $0$ is an essential singularity of $\exp(1/z)$.
+\end{example}
+
+\begin{remark}
+\textbf{Exercise.} $\sin\!\big(\tfrac1z\big)$ and $\cos\!\big(\tfrac1z\big)$ have essential
+singularities at $0$.
+\end{remark}
+
+\section{Casorati--Weierstrass and Picard}
+
+\begin{theorem}{Casorati--Weierstrass}{cw}
+Let $\alpha$ be an essential singularity of $f$. Then for any $\delta>0$, the image
+\[
+  f\bigl(B(\alpha,\delta)\setminus\set\alpha\bigr) \quad\text{is dense in } \C .
+\]
+\end{theorem}
+
+\begin{proof}
+It suffices to show $f\bigl(B(\alpha,\delta)\setminus\set\alpha\bigr)$ meets every disc
+$B(a,s)$. Suppose not: there exist $a\in\C$ and $s>0$ with
+\[
+  f\bigl(B(\alpha,\delta)\setminus\set\alpha\bigr)\cap B(a,s) = \emptyset,
+\]
+i.e. $\abs{f(z)-a}\ge s>0$ on $B(\alpha,\delta)\setminus\set\alpha$. Define
+\[
+  g(z) = \frac{1}{f(z)-a}, \qquad z\in B(\alpha,\delta)\setminus\set\alpha,
+\]
+holomorphic on the deleted neighbourhood with $\abs{g(z)}\le\dfrac1s$ (bounded). Hence $g$
+has a \emph{removable} singularity at $\alpha$. On the deleted neighbourhood,
+\[
+  f(z) - a = \frac{1}{g(z)}.
+\]
+If $g(\alpha)\ne0$, then $f-a$ (hence $f$) extends holomorphically: $\alpha$ is a
+removable singularity of $f$. If $g(\alpha)=0$, then $f-a$ has a pole at $\alpha$, so
+$\alpha$ is a polar singularity of $f$. Either way $\alpha$ is not essential --- a
+\textbf{contradiction}. Therefore
+\[
+  f\bigl(B(\alpha,\delta)\setminus\set\alpha\bigr)\cap B(a,s) \ne \emptyset,
+\]
+and density follows.
+\end{proof}
+
+\begin{theorem}{Great Picard's theorem (statement)}{picard}
+A much stronger statement holds than Casorati--Weierstrass: near an essential singularity
+$\alpha$,
+\[
+  f\bigl(B(\alpha,\delta)\setminus\set\alpha\bigr) = \C \quad\text{or}\quad \C\setminus\set{a}
+\]
+for some single exceptional value $a$. That is, on every deleted neighbourhood $f$ takes
+every complex value, with at most one exception, infinitely often.
+\end{theorem}
+
+
+% ============================================================
+\chapter{Laurent Series and Residues}
+% ============================================================
+
+Around a removable singularity a function has an ordinary power series; around a pole or an
+essential singularity we need \emph{negative} powers too. This leads to Laurent series.
+
+\section{Double-sided series}
+
+\begin{definition}{Convergence of a double-sided series}{doublesided}
+Let $(f_n)_{n\in\Z}$ be a doubly-infinite sequence of functions. We say
+$\sum_{n\in\Z} f_n$ \textbf{converges} (absolutely / normally / uniformly) if both
+\[
+  \sum_{n\ge0} f_n \qquad\text{and}\qquad \sum_{n<0} f_n
+\]
+converge (absolutely / normally / uniformly).
+\end{definition}
+
+\begin{definition}{Formal Laurent series}{fls}
+A \textbf{formal Laurent series} is $\sum_{n\in\Z} a_n x^n$. Split it as
+\[
+  \sum_{n\in\Z} a_n x^n = \underbrace{\sum_{n\ge0} a_n x^n}_{\text{ROC }=\rho_1}
+  \;+\; \underbrace{\sum_{n<0} a_n x^{n}}_{\text{via } \sum_{n<0}a_n (1/x)^{-n},\ \text{ROC }=\frac{1}{\rho_2}} .
+\]
+\end{definition}
+
+\subsection{Region of convergence: an annulus}
+
+The ``positive part'' $\sum_{n\ge0} a_n z^n$ converges for $\abs z<\rho_1$ (uniformly on
+compact subsets). The ``negative part'' $\sum_{n<0} a_n z^n=\sum_{n<0} a_n(1/z)^{-n}$
+converges for $\abs{1/z}<\dfrac{1}{\rho_2}$, i.e. $\rho_2<\abs z$. Hence the full series
+\[
+  \sum_{n\in\Z} a_n z^n \quad\text{converges for}\quad \rho_2 < \abs z < \rho_1 ,
+\]
+an \textbf{annulus}. Shifting the centre, $\sum_{n\in\Z} a_n(z-\alpha)^n$ defines a
+holomorphic function on the annulus $\rho_2<\abs{z-\alpha}<\rho_1$, where $\rho_1$ is the
+ROC of $\sum_{n\ge0}a_n x^n$ and $\frac1{\rho_2}$ is the ROC of $\sum_{n<0}a_n x^{-n}$.
+
+\begin{remark}
+Recall a power series defines a holomorphic function on a \emph{disc}; a Laurent series
+defines a holomorphic function on an \emph{annulus}. If we prove that any holomorphic
+function on an annulus has a Laurent expansion, then for any isolated singularity $\alpha$
+of $f$, taking the annulus $0<\abs{z-\alpha}<\delta$, $f$ has a Laurent expansion around
+$\alpha$.
+\end{remark}
+
+\section{Existence of the Laurent expansion}
+
+\begin{theorem}{Laurent expansion on an annulus}{laurent}
+A holomorphic function on an annulus $\rho_2<\abs{z-\alpha}<\rho_1$ has a Laurent expansion
+valid on the annulus. Explicitly, choosing radii $\rho_2<R_2<\abs{\alpha-a}<R_1<\rho_1$,
+for $\alpha$ in the annulus
+\[
+  f(\alpha) = \frac{1}{2\pi i}\int_{a+\gamma_{R_1}}\frac{f(z)}{z-\alpha}\,dz
+            \;-\; \frac{1}{2\pi i}\int_{a+\gamma_{R_2}}\frac{f(z)}{z-\alpha}\,dz ,
+\]
+and consequently
+\[
+  f(\alpha) = \sum_{n\ge0} c_n(\alpha-a)^n + \sum_{n<0} d_n(\alpha-a)^n ,
+\]
+where
+\[
+  c_n = \frac{1}{2\pi i}\int_{a+\gamma_{R_1}}\frac{f(z)}{(z-a)^{n+1}}\,dz,
+  \qquad
+  d_n = \frac{1}{2\pi i}\int_{a+\gamma_{R_2}}\frac{f(z)}{(z-a)^{n+1}}\,dz .
+\]
+\end{theorem}
+
+\begin{proof}
+\emph{Step 1: the two-circle formula.} Define, as before,
+\[
+  g(z) =
+  \begin{cases}
+    \dfrac{f(z)-f(\alpha)}{z-\alpha}, & z\ne\alpha,\\[8pt]
+    f'(\alpha), & z=\alpha,
+  \end{cases}
+\]
+holomorphic on the annulus. We claim
+\[
+  \int_{a+\gamma_{R_1}} g(z)\,dz = \int_{a+\gamma_{R_2}} g(z)\,dz .
+\]
+Divide the annular region between the two circles into finitely many pieces using radial
+\emph{spokes}. Cut so that each piece fits inside a disc contained in the annulus. Each
+such piece is bounded by a closed curve $\gamma'$ lying in a disc, on which $g$ is
+holomorphic; by the closed-curve theorem $\int_{\gamma'} g\,dz=0$. Summing over all pieces,
+the spoke edges are each traversed twice in opposite directions and cancel, leaving the
+outer circle (anticlockwise) minus the inner circle (which appears clockwise, hence with a
+minus sign):
+\[
+  \int_{a+\gamma_{R_1}} g\,dz - \int_{a+\gamma_{R_2}} g\,dz = 0 .
+\]
+Writing out $g$ and using $\displaystyle\int_{a+\gamma_{R_1}}\frac{dz}{z-\alpha}=2\pi i$
+while $\displaystyle\int_{a+\gamma_{R_2}}\frac{dz}{z-\alpha}=0$ (as $\alpha$ lies outside
+the inner circle, where $\frac{1}{z-\alpha}$ has a primitive) gives
+\[
+  \boxed{\ f(\alpha) = \frac{1}{2\pi i}\int_{a+\gamma_{R_1}}\frac{f(z)}{z-\alpha}\,dz
+            - \frac{1}{2\pi i}\int_{a+\gamma_{R_2}}\frac{f(z)}{z-\alpha}\,dz.\ }
+\]
+
+\emph{Step 2: expand each kernel.} On the outer circle $a+\gamma_{R_1}$ we have
+$\bigl\lvert\frac{\alpha-a}{z-a}\bigr\rvert<1$, so
+\[
+  \frac{1}{z-\alpha} = \frac{1}{(z-a)-(\alpha-a)}
+  = \frac{1}{z-a}\sum_{n\ge0}\Big(\frac{\alpha-a}{z-a}\Big)^n
+  = \sum_{n\ge0}\frac{(\alpha-a)^n}{(z-a)^{n+1}} .
+\]
+On the inner circle $a+\gamma_{R_2}$ we have $\abs{a-z}<\abs{a-\alpha}$, so
+\[
+  \frac{1}{z-\alpha} = \frac{1}{(a-\alpha)-(a-z)}
+  = \frac{1}{a-\alpha}\cdot\frac{1}{1-\frac{a-z}{a-\alpha}}
+  = -\sum_{n\ge0}\frac{(z-a)^n}{(\alpha-a)^{n+1}} .
+\]
+Substituting these uniformly convergent expansions and integrating term by term,
+\[
+  f(\alpha) = \sum_{n\ge0}\underbrace{\Big(\frac{1}{2\pi i}\int_{a+\gamma_{R_1}}\frac{f(z)}{(z-a)^{n+1}}\,dz\Big)}_{c_n}(\alpha-a)^n
+  + \sum_{n<0}\underbrace{\Big(\frac{1}{2\pi i}\int_{a+\gamma_{R_2}}\frac{f(z)}{(z-a)^{n+1}}\,dz\Big)}_{d_n}(\alpha-a)^n .
+\]
+This is the Laurent expansion.
+\end{proof}
+
+\begin{corollary}{Laurent expansion at an isolated singularity}{laurentiso}
+Around a point $\alpha$ of isolated singularity, a function has a Laurent expansion
+$f(z)=\sum_{n\in\Z} a_n(z-\alpha)^n$ (valid on $0<\abs{z-\alpha}<\delta$). The part
+$\displaystyle\sum_{n<0} a_n(z-\alpha)^n$ is called the \textbf{principal part} of the
+Laurent series.
+\end{corollary}
+
+\section{Classification via the principal part}
+
+\begin{keybox}
+\centering
+\begin{tabular}{lcl}
+Removable singularity & $\Longleftrightarrow$ & principal part $=0$ \\[3pt]
+Polar singularity (pole) & $\Longleftrightarrow$ & principal part is a \emph{finite} sum \\[3pt]
+Essential singularity & $\Longleftrightarrow$ & principal part is an \emph{infinite} sum
+\end{tabular}
+\end{keybox}
+
+\section{The residue}
+
+\begin{theorem}{Integral theorem (residue form)}{restheorem}
+Let $\alpha$ be an isolated singularity of $f$, with $f$ holomorphic on
+$B(\alpha,\delta)\setminus\set\alpha$. For $0<R<\delta$,
+\[
+  \int_{\alpha+\gamma_R} f(z)\,dz = 2\pi i\, c_{-1},
+\]
+where $c_{-1}$ is the coefficient of $(z-\alpha)^{-1}$ in the Laurent expansion of $f$
+around $\alpha$.
+\end{theorem}
+
+\begin{proof}
+Write $f(z)=\sum_{n\in\Z} a_n(z-\alpha)^n$, converging uniformly on the circle
+$\abs{z-\alpha}=R$. Integrating term by term and using the fundamental example
+\[
+  \int_{\alpha+\gamma_R}(z-\alpha)^n\,dz =
+  \begin{cases}
+    2\pi i, & n=-1,\\
+    0, & n\ne-1,
+  \end{cases}
+\]
+only the $n=-1$ term survives:
+\[
+  \int_{\alpha+\gamma_R} f(z)\,dz = a_{-1}\cdot 2\pi i = 2\pi i\, c_{-1}. \qedhere
+\]
+\end{proof}
+
+\begin{definition}{Residue}{residue}
+The coefficient of $(z-\alpha)^{-1}$ in the Laurent expansion of $f$ around $\alpha$ is
+called the \textbf{residue} of $f$ at $\alpha$, written $\Res(f,\alpha)$. Thus
+\[
+  \boxed{\ \int_{\alpha+\gamma_R} f(z)\,dz = 2\pi i\,\Res(f,\alpha).\ }
+\]
+\end{definition}
+
+\section{Calculating residues}
+
+\subsection{Removable singularity}
+If $\alpha$ is removable there are no negative powers, so
+\[
+  \Res(f,\alpha) = 0 .
+\]
+
+\subsection{Simple pole (order $1$)}
+Let $\alpha$ be a simple pole. Then $f(z)=\sum_{n\ge-1} c_n(z-\alpha)^n$, so
+\[
+  (z-\alpha)f(z) = \sum_{n\ge-1} c_n(z-\alpha)^{n+1} = c_{-1} + c_0(z-\alpha) + c_1(z-\alpha)^2 + \cdots,
+\]
+a convergent power series (same ROC). Evaluating at $z=\alpha$,
+\begin{keybox}
+\centering
+$\Res(f,\alpha) = c_{-1} = \displaystyle\lim_{z\to\alpha}(z-\alpha)\,f(z)$
+\qquad (simple pole).
+\end{keybox}
+
+\subsection{Quotient form $f=A/B$ with a simple zero of $B$}
+Suppose $f(z)=\dfrac{A(z)}{B(z)}$ with $A,B$ holomorphic, $A(\alpha)\ne0$, $B(\alpha)=0$
+and $B'(\alpha)\ne0$ (a simple zero of $B$, hence a simple pole of $f$). Then
+\[
+  \lim_{z\to\alpha}(z-\alpha)f(z)
+  = \lim_{z\to\alpha}(z-\alpha)\frac{A(z)}{B(z)}
+  = \lim_{z\to\alpha}\frac{A(z)}{\dfrac{B(z)-B(\alpha)}{z-\alpha}}
+  = \frac{A(\alpha)}{B'(\alpha)} ,
+\]
+so
+\begin{keybox}
+\centering
+$\Res(f,\alpha) = c_{-1} = \dfrac{A(\alpha)}{B'(\alpha)}$
+\qquad (simple zero of the denominator).
+\end{keybox}
+
+\subsection{Pole of order $m$}
+\begin{theorem}{Residue at a pole of order $m$}{resm}
+Let $\alpha$ be a pole of order $m\ge1$ of $f$, and set $g(z)=(z-\alpha)^m f(z)$
+(holomorphic at $\alpha$). Then
+\[
+  \boxed{\ \Res(f,\alpha) = \frac{1}{(m-1)!}\,\lim_{z\to\alpha} g^{(m-1)}(z).\ }
+\]
+\end{theorem}
+
+\begin{proof}[Idea]
+Near $\alpha$, $f(z)=\sum_{n\ge-m} c_n(z-\alpha)^n$, so
+$g(z)=(z-\alpha)^m f(z)=\sum_{n\ge-m}c_n(z-\alpha)^{n+m}=\sum_{k\ge0}c_{k-m}(z-\alpha)^k$ is
+holomorphic, with the coefficient of $(z-\alpha)^{m-1}$ equal to $c_{-1}$. By the
+power-series formula for coefficients, $c_{-1}=\dfrac{g^{(m-1)}(\alpha)}{(m-1)!}$.
+\end{proof}
+
+\subsection{Essential singularity}
+\begin{caution}
+Unfortunately, there is \textbf{no explicit closed-form formula} for calculating the
+residue at an essential singularity. One must compute the Laurent expansion directly and
+read off the coefficient $c_{-1}$.
+\end{caution}
+
+\vspace{1em}
+\begin{center}
+{\color{accentblue}\rule{0.4\textwidth}{1pt}}\\[4pt]
+{\itshape End of course.}
+\end{center}
+
+\end{document}
